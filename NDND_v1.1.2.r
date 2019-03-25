@@ -1,15 +1,15 @@
 ###############################################################################################
 #### The Non-Deterministic Network Model (NDND) Mullon et al., 2009 , Planque et al., 2014
-#### Version v1.0
+#### Version v1.1.2
 #### 10.12.18
 #### Author : Elliot Sivel
 ###############################################################################################
 
+# make the initialisation universal
 
 # 1. Initialization ----------------------------------------------------------
 
 rm(list=ls())                                        #clear the work environment                                                      
-getwd()                                              #Search for the work environment
 setwd("C:/Users/a22073/Documents/Model_NDND")        #Set the new work directory
 wd<-getwd()                                          #Save the work directory
 
