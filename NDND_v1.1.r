@@ -412,7 +412,7 @@ Computeb<-function(Biomass,Import,Export,Rho,Sigma,Bta,Mu){
   # print(b1)
   
   # Second constraint : Biomass increases are bounded above - inertia (Rho)
-  b2<-as.matrix((1/C)*(exp(Rho)-D)*Biomass+Import)
+  b2<-as.matrix(((1/C)*(exp(Rho)-D)*Biomass)+Export)
 
   # Third constraint : Flows are bounded above - satiation (Sigma)
   b3<-as.matrix(Biomass*Sigma)
@@ -423,7 +423,7 @@ Computeb<-function(Biomass,Import,Export,Rho,Sigma,Bta,Mu){
   # print(b4)
   
   # Fifth constraint, Biomass decreases are bounded below - Inertia (-Rho)
-  b5<-as.matrix((1/C)*(D-exp(-Rho))*Biomass+Export)
+  b5<-as.matrix(((1/C)*(D-exp(-Rho))*Biomass)+Import)
   # print(b5)
   
   b<-rbind(b1,b2,b3,b4,b5)
@@ -497,7 +497,6 @@ ComputeBiomass<-function(Biomass,F,Import,Export,Gama,Mu,Kapa){
 library(LIM)
 
 for (t in 1:NDNDData$Tmax) {
-  while (t<NDNDData$Tmax) {
     print(t)
     Import<-NDNDData$Importall[t,]
     Export<-NDNDData$Exportall[t,]
@@ -517,11 +516,10 @@ for (t in 1:NDNDData$Tmax) {
         BiomassSeries[t+1,c]<-0
       }
     }
-  }
 }
 
 library(ggplot2)
-ggplot(as.data.frame(BiomassSeries[,8]))+aes(1:NDNDData$Tmax,BiomassSeries[,8])+geom_line()
+ggplot(as.data.frame(BiomassSeries[,1]))+aes(1:NDNDData$Tmax,BiomassSeries[,1])+geom_line()
 
 # F<-rep(0,64)
 # F[NDNDData$PFv==1]<-f1
