@@ -1,0 +1,7 @@
+species.txt
+fluxes.txt
+coefs.txt
+import.txt
+export.txt
+1000
+1
