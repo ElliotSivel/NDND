@@ -518,6 +518,9 @@ for (t in 1:NDNDData$Tmax) {
     }
 }
 
+
+# 10. Plots ---------------------------------------------------------------
+
 library(ggplot2)
 library(gridExtra)
 ggplot(as.data.frame(BiomassSeries[,1]))+aes(1:NDNDData$Tmax,BiomassSeries[,1])+geom_line()
