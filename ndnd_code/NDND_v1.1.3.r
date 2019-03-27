@@ -708,7 +708,7 @@ library(LIM)                                           # loading the library LIM
 setwd("./ndnd_b")
 dir.create(paste(date_time_name,sep = ""))
 setwd(paste(getwd(),"/",date_time_name,sep=""))
-for (t in 1:NDNDData$Tmax) {
+for (t in 1:(NDNDData$Tmax-1)) {
   print(t)
   # We have defined Importall and Exportall as the matrix for all the years that we are simulating
   # Here we take out one year after another the value of Import and Export to estimate b each year
