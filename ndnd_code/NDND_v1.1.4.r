@@ -15,26 +15,33 @@ rm(list=ls())                                                                   
 # Load specific libraries
 
 library(LIM)                                           # loading the library LIM -- The LIM library is used for the sampling of flows -- Soetaert and van Oevelen (2014)
+library(ggplot2)                                       # ggplot
+
 
 # Set a time and date tag for the flags
 
 date_time_name<-paste(format(Sys.time(),"%Y_%m_%d_%H_%M_%S"),"_",sep = "")         # Creates a tag to identify the run in file names
 
-# Set your work directory
+# Set your work directories
 
-setwd(choose.dir())                                         # Choose interactively your work directory
+setwd(tcltk::tk_choose.dir(caption = "Choose main working directory (/NDND)"))                                         # Choose interactively your work directory
 wd<-getwd()                                                 # Get the new work directory and save your work directory in your work environment for later
+config_dir=paste(wd,'/ndnd_config',sep="")                                             # Sets the directory to the folder where data files are located
+configreport_dir=paste(wd,'/ndnd_configreport',sep="")                                             # Sets the directory to the folder where data files are located
+data_dir=paste(wd,'/ndnd_data',sep="")                                             # Sets the directory to the folder where data files are located
+files_dir=paste(wd,'/ndnd_files',sep="")                                             # Sets the directory to the folder where data files are located
+functions_dir=paste(wd,'/ndnd_functions',sep="")                                             # Sets the directory to the folder where data files are located
+outputs_dir=paste(wd,'/ndnd_outputs',sep="")                                             # Sets the directory to the folder where data files are located
+
 
 # 2. Source the functions -------------------------------------------------
 
-setwd('./ndnd_functions')                             # Sets the directory to the folder where function files are located
-source("readDATA_f.r")                                # Load the readDATA function -- Read the data and create a list of all data NDNDData
-source("NDNDConfigreport_f.r")                        # Load the NDNDConfigreport function -- Creates a report of the input data and parameters
-source("ComputeA_f.r")                                # Load the ComputeA function -- Computes the matrix of constraints on the flows
-source("Computeb_f.r")                                # Load the Computeb function -- Computes the matrix of constraints on the biomasses
-source("possibleAb_f.r")                              # Load the possibleAb function -- Deletes the irrelevant constraints in A and b matrices
-source("ComputeBiomass_f.r")                          # Load the ComputeBiomass function -- Computes the biomass at time step t+1
-setwd(wd)
+## source functions
+NDNDfunctions=list.files(functions_dir)
+for (i in 1:length(NDNDfunctions)){
+  paste('./ndnd_functions/',NDNDfunctions[i],sep="")
+  source(paste('./ndnd_functions/',NDNDfunctions[i],sep=""))
+}
 
 # 3. load files --------------------------------------------------------------
 
@@ -45,15 +52,12 @@ setwd(wd)
 # Load the Configuration file
 # Choice of the file is set as interactive
 
-setwd('./ndnd_config')                                                            # Sets the directory to the folder where configuration files are located
-NDNDconfig<-choose.files(caption = "Choose your configuration file!")             # Opens a window to choose the configuration file your want to implement.
-setwd(wd)
+setwd(config_dir)                                                            # Sets the directory to the folder where configuration files are located
+config_file<-file.choose()             # Opens a window to choose the configuration file your want to implement.
 
 # Loading the data with readDATA
 
-setwd('./ndnd_files')                                             # Sets the directory to the folder where data files are located
-NDNDData<-readDATA(NDNDconfig = NDNDconfig)                       # Applies the readDATA function
-setwd(wd)
+NDNDData<-readDATA(config_file=config_file,files_dir=files_dir)                       # Applies the readDATA function
 
 # Saving the NDNDData.RData in a particular file
 
