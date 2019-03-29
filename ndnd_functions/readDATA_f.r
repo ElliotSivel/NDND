@@ -1,7 +1,7 @@
 ###############################################################################################
 #### The Non-Deterministic Network Model (NDND) Mullon et al., 2009 , Planque et al., 2014
 #### readDATA function
-#### Version v1.1.3
+#### Version v1.0
 #### 27.03.19
 #### Author : Elliot Sivel
 ###############################################################################################
@@ -105,7 +105,7 @@ readDATA<-function(NDNDconfig){
   
   # Merging all created elements na list
   
-  NDNDData<-list(Tmax,Speciesnames,ns,nn,Biomass,Gama,Kapa,Mu,Rho,Sgma,Bta,Importall,Import,Exportall,Export,PF,PFv,Plotting)
+  NDNDData<-list(Tmax,Species,ns,nn,Biomass,Gama,Kapa,Mu,Rho,Sgma,Bta,Importall,Import,Exportall,Export,PF,PFv,Plotting)
   
   # Formating the list NDNDData : Adding the names of the elements in the list
   

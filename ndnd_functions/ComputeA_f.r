@@ -1,15 +1,15 @@
 ###############################################################################################
 #### The Non-Deterministic Network Model (NDND) Mullon et al., 2009 , Planque et al., 2014
 #### ComputeA function
-#### Version v1.1.3
-#### 27.03.19
+#### Version v1.0
+#### 28.03.19
 #### Author : Elliot Sivel
 ###############################################################################################
 
 ##### ComputeA function
 # Principle of the model is to determine trophic fluxes randomly in a set of possibilities delimited by constraints
 # Constraints expressed in terms of inequalities
-# Ax < b
+# Ax =< b
 # ComputeA compute the matrix A : matrix of constraints on flows
 # Need 2 parameter vectors : Gama (assimilation efficiency parameter) and Kapa (digestability parameter)
 # Need 2 elements : number of species (ns) and number of potential flows (nn)
