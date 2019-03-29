@@ -152,12 +152,6 @@ for (t in 1:(NDNDData$Tmax-1)) {
   # Compute biomass at the next time step
   
   BiomassSeries[t+1,]=ComputeBiomass(Biomass = BiomassSeries[t,],F=F,Import = Import,Export = Export,Gama = NDNDData$Gama,Mu = NDNDData$Mu,Kapa = NDNDData$Kapa,ns = NDNDData$ns)
-  
-  # for (c in 1:ncol(BiomassSeries)) {
-  #   if (BiomassSeries[t+1,c]<0){
-  #     BiomassSeries[t+1,c]<-0
-  #   }
-  # }
 }
 
 
