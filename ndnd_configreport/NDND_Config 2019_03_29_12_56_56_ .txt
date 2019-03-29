@@ -1,4 +1,4 @@
-NDND model configuration :  2019-03-26 16:05:39 
+NDND model configuration :  2019-03-29 12:57:09 
 R Version :  R version 3.5.3 (2019-03-11) 
 Computer Information :  Windows >= 8 x64 build 9200 x86-64 
 Number of Species :  8 
@@ -6,8 +6,7 @@ Length of the simulation :  25  years
 ------------------------------ 
 Species names :  
  
-[1] "Phytoplankton" "herbivorouspk" "omnivorouspk"  "Benthos"       "Pelagics"      "Demersals"     "Mammals"      
-[8] "Birds"        
+[1] "Phytoplankton" "herbivorouspk" "omnivorouspk"  "Benthos"       "Pelagics"      "Demersals"     "Mammals"       "Birds"        
 ------------------------------ 
 Starting Biomasses :  
  
@@ -75,13 +74,13 @@ Phytoplankton herbivorouspk  omnivorouspk       Benthos      Pelagics     Demers
 ------------------------------ 
 Biomass import in the system :  
  
-     Phytoplankton herbivorouspk omnivorouspk Benthos Pelagics Demersals Mammals Birds
-[1,]           800             8            2       0        0         0       0     0
-[2,]           800             8            2       0        0         0       0     0
-[3,]           800             8            2       0        0         0       0     0
-[4,]           800             8            2       0        0         0       0     0
-[5,]           800             8            2       0        0         0       0     0
-[6,]           800             8            2       0        0         0       0     0
+  Phytoplankton herbivorouspk omnivorouspk Benthos Pelagics Demersals Mammals Birds
+1           800             8            2       0        0         0       0     0
+2           800             8            2       0        0         0       0     0
+3           800             8            2       0        0         0       0     0
+4           800             8            2       0        0         0       0     0
+5           800             8            2       0        0         0       0     0
+6           800             8            2       0        0         0       0     0
  
 Mean Import :  
 Phytoplankton herbivorouspk  omnivorouspk       Benthos      Pelagics     Demersals       Mammals         Birds 
@@ -94,13 +93,13 @@ Phytoplankton herbivorouspk  omnivorouspk       Benthos      Pelagics     Demers
  
 Biomass export out of the system :  
  
-     Phytoplankton herbivorouspk omnivorouspk Benthos Pelagics Demersals Mammals Birds
-[1,]             0             0            0       0        0         0       0     0
-[2,]             0             0            0       0        0         0       0     0
-[3,]             0             0            0       0        0         0       0     0
-[4,]             0             0            0       0        0         0       0     0
-[5,]             0             0            0       0        0         0       0     0
-[6,]             0             0            0       0        0         0       0     0
+  Phytoplankton herbivorouspk omnivorouspk Benthos Pelagics Demersals Mammals Birds
+1             0             0            0       0        0         0       0     0
+2             0             0            0       0        0         0       0     0
+3             0             0            0       0        0         0       0     0
+4             0             0            0       0        0         0       0     0
+5             0             0            0       0        0         0       0     0
+6             0             0            0       0        0         0       0     0
  
 Mean Export :  
 Phytoplankton herbivorouspk  omnivorouspk       Benthos      Pelagics     Demersals       Mammals         Birds 
@@ -113,8 +112,7 @@ Phytoplankton herbivorouspk  omnivorouspk       Benthos      Pelagics     Demers
  
 Who eats whom? : Trophic flows matrix (Preys in rows / Predators in columns) 
  
-[1] "Phytoplankton" "herbivorouspk" "omnivorouspk"  "Benthos"       "Pelagics"      "Demersals"     "Mammals"      
-[8] "Birds"        
+NULL
  
               Phytoplankton herbivorouspk omnivorouspk Benthos Pelagics Demersals Mammals Birds
 Phytoplankton             0             1            1       1        0         0       0     0
