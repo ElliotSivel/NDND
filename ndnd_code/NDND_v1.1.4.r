@@ -17,13 +17,10 @@ rm(list=ls())                                                                   
 library(LIM)                                           # loading the library LIM -- The LIM library is used for the sampling of flows -- Soetaert and van Oevelen (2014)
 library(ggplot2)                                       # ggplot
 
-
 # Set a time and date tag for the flags
-
-date_time_name<-paste(format(Sys.time(),"%Y_%m_%d_%H_%M_%S"),"_",sep = "")         # Creates a tag to identify the run in file names
+date_time_name<-paste(format(Sys.time(),"%Y_%m_%d_%H_%M_%S"),sep = "")         # Creates a tag to identify the run in file names
 
 # Set your work directories
-
 setwd(tcltk::tk_choose.dir(caption = "Choose main working directory (/NDND)"))                                         # Choose interactively your work directory
 wd<-getwd()                                                 # Get the new work directory and save your work directory in your work environment for later
 config_dir=paste(wd,'/ndnd_config',sep="")                                             # Sets the directory to the folder where data files are located
@@ -61,9 +58,7 @@ NDNDData<-readDATA(config_file=config_file,files_dir=files_dir)                 
 
 # Saving the NDNDData.RData in a particular file
 
-setwd("./ndnd_data")                                                       # Set the directory to the folder where NDNDData is saved
-save(NDNDData,file=paste("NDNDData_",date_time_name,".RData"))             # Save NDNDData
-setwd(wd)
+save(NDNDData,file=paste(data_dir,"/NDNDData_",date_time_name,".RData",sep=""))             # Save NDNDData
 
 # 4. Report Model Configuration --------------------------------------------
 
