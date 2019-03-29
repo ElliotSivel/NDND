@@ -1,7 +1,8 @@
 ###############################################################################################
 #### The Non-Deterministic Network Model (NDND) Mullon et al., 2009 , Planque et al., 2014
-#### Version v1.1.3
-#### 25.03.19
+#### Model simulation
+#### Version v1.1.4
+#### 27.03.19
 #### Author : Elliot Sivel
 ###############################################################################################
 
@@ -13,8 +14,8 @@ rm(list=ls())                                        #clear the work environment
 
 # This code is not generalized. You need to enter your work directory just below.
 wd<-getwd()                                              #Set the new work directory
-setwd(wd)                                          #Save the work directory
 
+date_time_name<-paste(format(Sys.time(),"%Y_%m_%d_%H_%M_%S"),"_",sep = "")
 # 2. load files --------------------------------------------------------------
 
 # To run the entire code, you need a set of 6 files.
@@ -47,118 +48,11 @@ NDNDconfig<-file.choose()                                   # We are opening a w
                                                             # You can name as you want, You just have to select it and its directory will automaticaly be loaded in R
 setwd(wd)
 
-# The readDATA function is loading and reading the data.
-## It is split in three parts :
-## The first part is scanning the names of the files contained in the configuration file.
-## The second part tests the existence of the files. It is to make sure all files are present in your work directory'
-## The third part is loading parameters for the rest of the simulation
-## The fourth part formats the import and export data files
-## The fifth part is vectorizing the flux matrix
-# Finally, the function loads the NDNDData file : the list of all data for the simulation to come 
-
-readDATA<-function(NDNDconfig){
-  
-  # Scanning the config file to extract the names of the files 
-  file.names<-scan(NDNDconfig,what=character())             # file.names contains the names of the files as character that are given the config file             
-  
-  # Test the presence of the data files needed in the work directory
-  exist.file<-vector(length=length(file.names)-2)           # Create an empty vector of length of number of files (5)
-  for (i in (1:(length(file.names)-2))) {                   # Testing with binary if the files exist                 
-    exist.file[i]<-file.exists(file.names[i])
-  }
-  
-  # Output is a vector of 5 values indicating if the files are existing (0 = no; 1 = yes)
-  
-  # Load the files
-  ## We only load the files if the five needed files are available.
-  ## Therefore we set a condition that we start loading the data if the sum of exist.file equals the number of files
-  ## It one file is missing. We implement that the code is stopping and returning a missing file message
-  if (sum(exist.file)==length(file.names)-2){
-      Species<-scan(file=file.names[1],what=character(),quote="")                                             # Read species.txt
-      PF<-read.table(file.names[2], header=F, sep="\t",stringsAsFactors = F)                                  # Read fluxes.txt
-      Coefficients<-as.matrix(read.table(file.names[3], header=F, sep="\t",stringsAsFactors = F))             # Read coefs.txt
-      Import<-scan(file.names[4], what=numeric())                                                             # Read import.txt
-      Export<-scan(file.names[5], what=numeric())                                                             # Read export.txt
-  }  else {stop("Missing file")}        
-  
-  # Output is the five distinct data.frame containing the data
-  
-  # We now have to implement a certain amount of parameters that we need for the rest of the simulation
-  ## We define the number of years for a simulation (Tmax)
-  Tmax<-as.numeric(file.names[6])
-  ## We extract the names of species
-  Speciesnames<-Species
-  ## We estimate the number of possible flows.
-  ### It is estimated as the number of fluxes if all species where linked in our food web topology
-  ### Mathematically it represents (number of species)^2
-  ns<-as.numeric(length(Species))             # Number of species
-  nn<-ns*ns                                   # Number of possible flows in the food web
-  
-  # Output is four elements that are going to be used often in the rest of the code
-  
-  # As the matrix Coefficients contains more than one parameter and more than one species, we attribute species names (colnames) and parameter names (rownames) in the Coefficients matrix 
-  colnames(Coefficients)<-Species
-  rownames(Coefficients)<-c("Biomass","Gama","Kapa","Mu","Rho","Sigma","Bta")
-  # We create one file for each of the parameters
-  Biomass<-Coefficients[1,]               # Row 1 is the initial biomass for each species, it is given in tons per km2
-  Gama<-Coefficients[2,]                  # Row 2 is Gama, the potential assimiliation efficiency for each species
-  Kapa<-Coefficients[3,]                  # Row 3 is Kapa, the digestability of each species
-  Mu<-Coefficients[4,]                    # Row 4 is Mu, the metabolic losses for each species
-  Rho<-Coefficients[5,]                   # Row 5 is Rho, the parameter accounting for inertia
-  Sgma<-Coefficients[6,]                  # Row 6 is Sigma, the parameter accounting for satiation. It has been renamed Sgma because Sigma is already a function in R
-  Bta<-Coefficients[7,]                   # Row 7 is Beta, the value for refuge biomass
-  
-  # Output is 7 files (one for each parameter) with the species names with a value for the parameter
-  
-  # Presently, the import and export data matrix are given for one year as we keep these values constant for the entire simulation.
-  ## If the import/export file has only one row, the values in the row are copied for all time step (Tmax)
-  ## If the import/export file is of dimension Tmax:ns, Import = Import data for all the simulation
-  ## If the import/export file has a dimension higher than Tmax, we only take the data for Tmax time step
-  ## If the import/export file is higher than 1 and smaller than Tmax, we stop the simulation because we are missing some import data
-  ## If the import/export file is NULL, we stop the simulation because import data is missing
-  if (nrow(as.matrix(t(Import)))==1){
-    Importall<-matrix(rep(as.matrix(t(Import)),each=Tmax),nrow=Tmax)                        # If the nb of rows in Import equals 1, then we duplicate the vector times Tmax
-  } else if (nrow(as.matrix(t(Import)))==Tmax){
-    Importall<-Import                                                                       # If the nb of rows in Import equals Tmax, then the matrix Import equals Importall
-  } else if (nrow(as.matrix(t(Import))) > Tmax){                      
-    Importall<-Import[1:Tmax,]                                                              # If the nb of rows in Import is greater than Tmax, then the matrix Import from row 1 to Tmax equals Importall
-  } else if (nrow(as.matrix(t(Import))) < Tmax && nrow(as.matrix(t(Import))) != 1){
-    stop("1 < number of rows < Tmax")                                                       # If the nb of rows in Import is between one and Tmax, then the calculation stops
-  } else {stop("Import data in wrong form")}                                                # If none of the condition above is fulfilled, then the nb of rows is equals to 0, then the calculation stops because import data is missing
-  
-  if (nrow(as.matrix(t(Export)))==1){
-    Exportall<-matrix(rep(as.matrix(t(Export)),each=Tmax),nrow=Tmax)                        # If the nb of rows in Export equals 1, then we duplicate the vector times Tmax
-  } else if (nrow(as.matrix(t(Export)))==1){
-    Exportall<-Export                                                                       # If the nb of rows in Export equals Tmax, then the matrix Export equals Exportall
-  } else if (nrow(as.matrix(t(Export))) > Tmax){
-    Exportall<-Export[1:Tmax,]                                                              # If the nb of rows in Export is greater than Tmax, then the matrix Export from row 1 to Tmax equals Exportall
-  } else if (nrow(as.matrix(t(Export))) < Tmax && nrow(as.matrix(t(Export))) != 1){
-    stop("1 < number of rows < Tmax")                                                       # If the nb of rows in Export is between one and Tmax, then the calculation stops
-  } else {stop("Export data missing")}                                                      # If none of the condition above is fulfilled, then the nb of rows is equals to 0, then the calculation stops because export data is missing
-  
-  # Then we vectorize the matrix of possible flows : trick used by Christian mullon to facilitate the calculation of the model
-  PFv=as.vector(t(PF))
-  
-  # Finally we set the plotting parameter which a bolean value for plotting or not the graphs
-  Plotting<- file.names[7]                          # If Plotting equals 1, we plot the graphs. If it equals 0 we don't               
-  
-  # We ask the function to return a list of 18 elements
-  ## The elements given in the list are the input data to run the model
-  return(list(Tmax,Speciesnames,ns,nn,Biomass,Gama,Kapa,Mu,Rho,Sgma,Bta,Importall,Import,Exportall,Export,PF,PFv,Plotting))
-}
-
 # We load the data by applying the function
 ## All data for the rest of the simulation are contained in the NDNDData list
 NDNDData<-readDATA(NDNDconfig = NDNDconfig)
 
-# We add names and species names in NDNDData
-names(NDNDData)<-c("Tmax","Speciesnames","ns","nn","Biomass","Gama","Kapa","Mu","Rho","Sigma","Beta","Importall","Import","Exportall","Export","PF","PFv","Plotting")
-colnames(NDNDData$PF)<-NDNDData$Speciesnames
-rownames(NDNDData$PF)<-NDNDData$Speciesnames
-colnames(NDNDData$Importall)<-NDNDData$Speciesnames
-colnames(NDNDData$Exportall)<-NDNDData$Speciesnames
 
-date_time_name<-paste(format(Sys.time(),"%Y_%m_%d_%H_%M_%S"),"_",NDNDData$Tmax,sep = "")
 
 # To be able to give the initial condition of each simulation we are running, we are saving the NDNDData file with date and time
 setwd("./ndnd_data")
@@ -169,161 +63,7 @@ setwd(wd)
 
 # This function is not a function that is major for the model
 ## It is a function that creates a report of the data input for a simulation
-NDNDConfigreport<-function(NDNDData){
-  
-  # To be able to reproduce the simulation, we print the system characteristics and the simulation setup
-  cat("NDND model configuration : ",as.character(Sys.time()),"\n")                # Prints out the date and time of running
-  a<-R.Version()                                                                  
-  cat("R Version : ", a$version.string,"\n")                                      # Prints out the version of R used to run the model
-  b<-Sys.info()                                                                     
-  cat("Computer Information : ", b[1],b[2],b[3],b[5],"\n")                        # Prints out the software system (Windows, Mac or Linux) version
-  cat("Number of Species : ",NDNDData$ns,"\n")                                    # Prints out the number of species
-  cat("Length of the simulation : ", NDNDData$Tmax," years","\n")                 # Prints out the length of the simulation
-  
-  cat("------------------------------","\n")
-  
-  # Prints out the species names implemented in the model 
-  cat("Species names : ","\n")
-  cat("","\n")
-  print(NDNDData$Speciesnames)
-  
-  cat("------------------------------","\n")
-  
-  # Prints out the initial biomasses implemented in the model
-  cat("Starting Biomasses : ","\n")
-  cat("","\n")
-  print(NDNDData$Biomass)
-  
-  cat("------------------------------","\n")
-  
-  # Prints out the values for the Gama parameter implemented in the model
-  cat("Potential assimilation efficienties (gamma) :","\n")
-  cat("","\n")
-  print(NDNDData$Gama)
-  
-  cat("------------------------------","\n")
-  
-  # Prints out the values for the Kapa parameter implemented in the model 
-  cat("Food quality :","\n")
-  cat("","\n")
-  print(NDNDData$Kapa)
-  
-  cat("------------------------------","\n")
-  
-  # Prints out the values for the Mu parameter implemented in the model
-  cat("Other intial metabolic losses :","\n")
-  cat("","\n")
-  print(NDNDData$Mu)
-  
-  cat("------------------------------","\n")
-  
-  # Prints out the values for the Rho parameter implemented in the model
-  cat("Inertia :","\n")
-  cat("","\n")
-  print(NDNDData$Rho)
-  
-  cat("------------------------------","\n")
-  
-  # We calculate and print out the maximum growth rate as the exponential value of Rho
-  cat("Maximum biomass growth rate :","\n")
-  cat("","\n")
-  print(exp(NDNDData$Rho))
-  
-  cat("------------------------------","\n")
-  
-  # We calculate and print out the maximum decline rate as the exponential value of -Rho
-  cat("Maximum biomass decline rate :","\n")
-  cat("","\n")
-  print(exp(-(NDNDData$Rho)))
-  
-  cat("------------------------------","\n")
-  
-  # Prints out the values of the Sigma parameter implemented in the model
-  cat("Satiation :","\n")
-  cat("","\n")
-  print(NDNDData$Sigma)
-  
-  cat("------------------------------","\n")
-  
-  # We estimate and print out the food requirements with stable biomass for 2 years
-  cat("Food requirements with stables biomass (no predation) : ","\n")
-  cat("","\n")
-  print(NDNDData$Mu/NDNDData$Gama)
-  
-  cat("------------------------------","\n")
-  
-  cat("Food requirements in year 2 with stable biomass (no predation) : ","\n")
-  cat("","\n")
-  print((NDNDData$Mu/NDNDData$Gama)*NDNDData$Biomass)
-  
-  cat("------------------------------","\n")
-  
-  # We estimate and print out the food requirements when the biomass decrease at maximum rate
-  cat("Food requirements with max decrease in biomass (no predation) : ","\n")
-  cat("","\n")
-  print((NDNDData$Mu/NDNDData$Gama)*(exp(-NDNDData$Rho)-exp(-NDNDData$Mu))/(1-exp(-NDNDData$Mu)))
-  
-  cat("------------------------------","\n")
-  
-  cat("","\n")
-  # Test to check if the satiation has been set high enough for the calculations.
-  # In case it is too low for one or more species, then a warning message should be printed.
-  # This test does not work for the phytoplankton which does not have a value for satiation since it does not predate.
-  satiation.setup<-NDNDData$Mu/NDNDData$Gama>NDNDData$Sigma
-  F<-satiation.setup[which(satiation.setup==T)]
-  if (length(F) > 0)  {
-    cat("Warning : Satiation is set too low for the following species","\n")
-    print(names(F))
-  } else { cat("All satiation values high enough for calculation","\n")}
-  cat("","\n")
-    
-  cat("------------------------------","\n")
-  
-  # Prints out the values of refuge biomass for each species
-  cat("Refuge Biomass (Beta) : ","\n")
-  cat("","\n")
-  print(NDNDData$Beta)
-  
-  cat("------------------------------","\n")
-  
-  # Prints out the Import values for each year of the simulation
-  # Prints out the mean Import values for each species
-  # Prints out the variance of Import values for each species
-  cat("Biomass import in the system : ","\n")
-  cat("","\n")
-  print(head(NDNDData$Importall))
-  cat("","\n")
-  cat("Mean Import : ","\n")
-  print(apply(NDNDData$Importall,2,mean))
-  cat("","\n")
-  cat("Variance of import : ","\n")
-  print(apply(NDNDData$Importall,2,var))
-  
-  cat("------------------------------","\n")
-  
-  # The same for the export values
-  cat("","\n")
-  cat("Biomass export out of the system : ","\n")
-  cat("","\n")
-  print(head(NDNDData$Exportall))
-  cat("","\n")
-  cat("Mean Export : ","\n")
-  print(apply(NDNDData$Exportall,2,mean))
-  cat("","\n")
-  cat("Variance of export : ","\n")
-  print(apply(NDNDData$Exportall,2,var))
-  
-  cat("------------------------------","\n")
-  
-  # Prints out teh topology of the food web : the existing trophic links
-  cat("","\n")
-  cat("Who eats whom? : Trophic flows matrix (Preys in rows / Predators in columns)","\n")
-  cat("","\n")
-  print(NDNDData$Speciesnames)
-  cat("","\n")
-  print(NDNDData$PF)
-  
-}
+
 
 # We save the output in a file NDNDConfigreport in a txt format
 setwd("./ndnd_configreport")
@@ -708,7 +448,7 @@ library(LIM)                                           # loading the library LIM
 setwd("./ndnd_b")
 dir.create(paste(date_time_name,sep = ""))
 setwd(paste(getwd(),"/",date_time_name,sep=""))
-for (t in 1:(NDNDData$Tmax-1)) {
+for (t in 1:NDNDData$Tmax) {
   print(t)
   # We have defined Importall and Exportall as the matrix for all the years that we are simulating
   # Here we take out one year after another the value of Import and Export to estimate b each year
