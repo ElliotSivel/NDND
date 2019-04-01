@@ -10,10 +10,11 @@
 # This function takes the NDNDConfig file to find the data files and load them into R
 # After loading the data, it assemble them in a NDNDData object
 
-readDATA<-function(NDNDconfig){
-  file.names<-scan(NDNDconfig,what=character())                     # Reading the elements given by the NDNDConfig file
+readDATA<-function(config_file,files_dir){
+  file.names<-scan(config_file,what=character())                     # Reading the elements given by the NDNDConfig file
                                                                     # file.names is object containing the elements of the NDNDConfig file as character             
-  
+  current_wd=getwd()
+  setwd(files_dir)
   # Test the presence of the data files needed in the work directory
   
   exist.file<-vector(length=length(file.names)-2)                   # Create an empty vector of length of number of files
@@ -112,6 +113,6 @@ readDATA<-function(NDNDconfig){
   names(NDNDData)<-c("Tmax","Species","ns","nn","Biomass","Gama","Kapa","Mu","Rho","Sigma","Beta","Importall","Import","Exportall","Export","PF","PFv","Plotting")
   
   # Give the elements the function should return
-  
+  setwd(current_wd)
   return(NDNDData)
 }
