@@ -21,7 +21,14 @@ library(ggplot2)                                       # ggplot
 date_time_name<-paste(format(Sys.time(),"%Y_%m_%d_%H_%M_%S"),sep = "")         # Creates a tag to identify the run in file names
 
 # Set your work directories
-setwd(tcltk::tk_choose.dir(caption = "Choose main working directory (/NDND)"))                                         # Choose interactively your work directory
+
+### to set in function
+# Choose interactively your work directory
+c_info<-Sys.info()[1]
+if (c_info == "Windows") {
+  setwd(choose.dir(caption = "Choose main working directory (/NDND)"))
+} else {setwd(tcltk::tk_choose.dir(caption = "Choose main working directory (/NDND)"))}
+                                        
 wd<-getwd()                                                 # Get the new work directory and save your work directory in your work environment for later
 config_dir=paste(wd,'/ndnd_config',sep="")                                             # Sets the directory to the folder where data files are located
 configreport_dir=paste(wd,'/ndnd_configreport',sep="")                                             # Sets the directory to the folder where data files are located
@@ -34,7 +41,7 @@ outputs_dir=paste(wd,'/ndnd_outputs',sep="")                                    
 # 2. Source the functions -------------------------------------------------
 
 ## source functions
-NDNDfunctions=list.files(functions_dir)
+NDNDfunctions<-list.files(functions_dir)
 for (i in 1:length(NDNDfunctions)){
   paste('./ndnd_functions/',NDNDfunctions[i],sep="")
   source(paste('./ndnd_functions/',NDNDfunctions[i],sep=""))
@@ -64,10 +71,9 @@ save(NDNDData,file=paste(data_dir,"/NDNDData_",date_time_name,".RData",sep="")) 
 
 # Create a report of the input data and parametrization
 
-setwd("./ndnd_configreport")                                  # Set the directory to the folder where configuration reports are saved 
+setwd(configreport_dir)                                  # Set the directory to the folder where configuration reports are saved 
 NDNDConfigreport(NDNDData = NDNDData)                         # Applies the NDNDConfigreport function
                                                               # Creates the configuration report
-setwd(wd)
 
 # 5. Compute A : Matrix of constraint on flows ----------------------------
 
@@ -80,9 +86,8 @@ setwd(wd)
 
 # Compute matrix of constraints of flows -- Constant over the entire simulation
 
-setwd('./ndnd_outputs/ndnd_computeA')
+setwd(outputs_dir)
 A<-ComputeA(Gama=NDNDData$Gama,Kapa = NDNDData$Kapa,ns=NDNDData$ns,nn=NDNDData$nn)
-setwd(wd)
 
 # 6. Initialization of the simulation -------------------------------------
 
