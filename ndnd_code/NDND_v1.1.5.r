@@ -29,13 +29,6 @@ Sys.time.NDND=Sys.time()
 # Choose interactively your work directory
 
 wd<-selectDirectory(caption = "Choose your work directory : ")
-
-# c_info<-Sys.info()[1]
-# if (c_info == "Windows") {
-#   setwd(choose.dir(caption = "Choose main working directory (/NDND)"))
-# } else {setwd(tcltk::tk_choose.dir(caption = "Choose main working directory (/NDND)"))}
-                                        
-wd<-getwd()                                                 # Get the new work directory and save your work directory in your work environment for later
 config_dir=paste(wd,'/ndnd_config',sep="")                                             # Sets the directory to the folder where data files are located
 configreport_dir=paste(wd,'/ndnd_configreport',sep="")                                             # Sets the directory to the folder where data files are located
 data_dir=paste(wd,'/ndnd_data',sep="")                                             # Sets the directory to the folder where data files are located
@@ -53,7 +46,18 @@ for (i in 1:length(NDNDfunctions)){
   source(paste('./ndnd_functions/',NDNDfunctions[i],sep=""))
 }
 
-# 3. load files --------------------------------------------------------------
+
+# 3. Extract packages version ---------------------------------------------
+
+# Loading the information about the running session -- systems information, packages, R version, OS,...
+
+session_info<-sessionInfo()                     
+
+# Extract the version of loaded packages
+
+package_version<-packages.version.NDND(Session_info = session_info)
+
+# 4. load files --------------------------------------------------------------
 
 # There are 6 .txt files needed to run the model
 # Data files (5) : species.txt, fluxes.txt, coefs.txt, import.txt, export.txt
