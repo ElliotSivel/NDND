@@ -14,13 +14,13 @@
 
 NDNDConfigreport<-function(NDNDData){
   
-  sink(paste("NDND_Config",date_time_name,".txt"))        # Opens a file with the defined name, in the directory indicated in the simulation code
+  sink(paste("NDND_Config_",paste(format(NDNDData$Sys.time,"%Y_%m_%d_%H_%M_%S"),sep = ""),".txt",sep=""))        # Opens a file with the defined name, in the directory indicated in the simulation code
                                                           # Print all the wanted elements of function without printing them in the console
                                                           # File accessible and created after sink()
   
   # Set identification flag
   
-  cat("NDND model configuration : ",as.character(Sys.time()),"\n")                # Prints out the date and time of running
+  cat("NDND model configuration : ",as.character(NDNDData$Sys.time),"\n")                # Prints out the date and time of running
   a<-R.Version()                                                                  
   cat("R Version : ", a$version.string,"\n")                                      # Prints out the version of R used to run the model
   b<-Sys.info()                                                                     

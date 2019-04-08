@@ -10,15 +10,17 @@
 
 # Initialize the simulation : Clear your work environment
 
-rm(list=ls())                                                                      #clear the work environment
+graphics.off()                              # clear all graphical windows
+cat("\014")                                 # clear console
+rm(list=ls())                               # clear the work environment
 
 # Load specific libraries
 
-library(LIM)                                           # loading the library LIM -- The LIM library is used for the sampling of flows -- Soetaert and van Oevelen (2014)
-library(ggplot2)                                       # ggplot
+require(LIM)                                           # loading the library LIM -- The LIM library is used for the sampling of flows -- Soetaert and van Oevelen (2014)
+require(ggplot2)                                       # ggplot
 
 # Set a time and date tag for the flags
-date_time_name<-paste(format(Sys.time(),"%Y_%m_%d_%H_%M_%S"),sep = "")         # Creates a tag to identify the run in file names
+Sys.time.NDND=Sys.time()
 
 # Set your work directories
 
@@ -49,8 +51,8 @@ for (i in 1:length(NDNDfunctions)){
 
 # 3. load files --------------------------------------------------------------
 
-# 6 .txt files + the function files needed to run the model
-# Data files : species.txt, fluxes.txt, coefs.txt, import.txt, export.txt
+# There are 6 .txt files needed to run the model
+# Data files (5) : species.txt, fluxes.txt, coefs.txt, import.txt, export.txt
 # Configuration file : NDNDConfig -- Names of the data files, length of simulation and plotting parameter
 
 # Load the Configuration file
@@ -61,11 +63,11 @@ config_file<-file.choose()             # Opens a window to choose the configurat
 
 # Loading the data with readDATA
 
-NDNDData<-readDATA(config_file=config_file,files_dir=files_dir)                       # Applies the readDATA function
+NDNDData<-readDATA(config_file=config_file,files_dir=files_dir,Sys.time.NDND = Sys.time.NDND)                       # Applies the readDATA function
 
 # Saving the NDNDData.RData in a particular file
 
-save(NDNDData,file=paste(data_dir,"/NDNDData_",date_time_name,".RData",sep=""))             # Save NDNDData
+save(NDNDData,file=paste(data_dir,"/NDNDData_",paste(format(Sys.time.NDND,"%Y_%m_%d_%H_%M_%S"),sep = ""),".RData",sep=""))             # Save NDNDData
 
 # 4. Report Model Configuration --------------------------------------------
 
@@ -87,7 +89,7 @@ NDNDConfigreport(NDNDData = NDNDData)                         # Applies the NDND
 # Compute matrix of constraints of flows -- Constant over the entire simulation
 
 setwd(outputs_dir)
-A<-ComputeA(Gama=NDNDData$Gama,Kapa = NDNDData$Kapa,ns=NDNDData$ns,nn=NDNDData$nn)
+A<-ComputeA(NDNDData)
 
 # 6. Initialization of the simulation -------------------------------------
 
@@ -96,8 +98,8 @@ A<-ComputeA(Gama=NDNDData$Gama,Kapa = NDNDData$Kapa,ns=NDNDData$ns,nn=NDNDData$n
 BiomassSeries<-matrix(data = 0, nrow = NDNDData$Tmax, ncol = NDNDData$ns)               # Creates a matrix of dimension Tmax vs number of species full of 0. It is thought be filled with the biomass obtained during the calculations
 FlowSeries<-matrix(data = 0, nrow = NDNDData$Tmax, ncol = sum(NDNDData$PFv))            # Creates a matrix of dimension Tmax vs the number of possible flows. We kept only the links for which we had a 1 in PF. There are 18 links in our topology.
 BiomassSeries[1,]<-NDNDData$Biomass                                                     # We give that the biomass for t = 1 is the initial biomass
-sim_b<-NULL
-sim_pb<-NULL
+#sim_b<-NULL #to be removed?
+#sim_pb<-NULL #to be removed?
 
 ## Not implemented yet, needs to be done for further investigation
 # T=1                                                                                     # Set initial time to 1 
@@ -117,14 +119,15 @@ for (t in 1:(NDNDData$Tmax-1)) {
   
   # Compute b
   
+  #b<-Computeb(BiomassSeries[t,],Import,Export,NDNDData$Rho,NDNDData$Sigma,NDNDData$Beta,NDNDData$Mu,NDNDData$nn)
   b<-Computeb(BiomassSeries[t,],Import,Export,NDNDData$Rho,NDNDData$Sigma,NDNDData$Beta,NDNDData$Mu,NDNDData$nn)
-  sim_b<-cbind(sim_b,b)
+  #sim_b<-cbind(sim_b,b)#to be removed?
   
   # Delete irrelevant constraints using possibleAb
   
   Abp<-possibleAb(A,b,NDNDData$PFv)
   pA<-Abp[[1]];pb<-Abp[[2]]               # Defines two matrices with the existing constraint on flows and biomasses
-  sim_pb<-cbind(sim_pb,pb)
+  #sim_pb<-cbind(sim_pb,pb)#to be removed?
   
   ##### POSSIBLE FUNCTION
   # The LIM defines three possible constraints
@@ -135,7 +138,10 @@ for (t in 1:(NDNDData$Tmax-1)) {
   h<-as.matrix(-pb)                       # Defining b (constraints on biomasses) for th sampling
   
   # Sampling Fluxes -- Sampling algorithm : mirror
-  
+  # TRY=try()
+  # if(inherits(TRY, "try-error")==FALSE){
+  # } else {
+  # }  
   Fsample<-xsample(G=G,H=h,iter=100,burninlength=100,outputlength=100,type="mirror")
 
   #####

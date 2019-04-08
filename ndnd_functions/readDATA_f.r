@@ -10,7 +10,7 @@
 # This function takes the NDNDConfig file to find the data files and load them into R
 # After loading the data, it assemble them in a NDNDData object
 
-readDATA<-function(config_file,files_dir){
+readDATA<-function(config_file,files_dir,Sys.time.NDND){
   file.names<-scan(config_file,what=character())                     # Reading the elements given by the NDNDConfig file
                                                                     # file.names is object containing the elements of the NDNDConfig file as character             
   current_wd=getwd()
@@ -106,11 +106,11 @@ readDATA<-function(config_file,files_dir){
   
   # Merging all created elements na list
   
-  NDNDData<-list(Tmax,Species,ns,nn,Biomass,Gama,Kapa,Mu,Rho,Sgma,Bta,Importall,Import,Exportall,Export,PF,PFv,Plotting)
+  NDNDData<-list(Sys.time.NDND,Tmax,Species,ns,nn,Biomass,Gama,Kapa,Mu,Rho,Sgma,Bta,Importall,Import,Exportall,Export,PF,PFv,Plotting)
   
   # Formating the list NDNDData : Adding the names of the elements in the list
   
-  names(NDNDData)<-c("Tmax","Species","ns","nn","Biomass","Gama","Kapa","Mu","Rho","Sigma","Beta","Importall","Import","Exportall","Export","PF","PFv","Plotting")
+  names(NDNDData)<-c("Sys.time","Tmax","Species","ns","nn","Biomass","Gama","Kapa","Mu","Rho","Sigma","Beta","Importall","Import","Exportall","Export","PF","PFv","Plotting")
   
   # Give the elements the function should return
   setwd(current_wd)

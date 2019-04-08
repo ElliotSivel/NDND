@@ -14,17 +14,12 @@
 # Need 2 parameter vectors : Gama (assimilation efficiency parameter) and Kapa (digestability parameter)
 # Need 2 elements : number of species (ns) and number of potential flows (nn)
 
-ComputeA<-function(Gama,Kapa,ns,nn){
-  
-  # Set identification flag
-  
-  ID<-NULL
-  ID[1]<-as.character(Sys.time())                           # Print Date and Time
-  ID[2]<-R.Version()$version.string                         # Print R version
-  ID[3]<-Sys.info()[1]                                      # Print the Computer software version (Windows, Mac or Linux)
-  ID[4]<-Sys.info()[2]
-  ID[5]<-Sys.info()[3]
-  ID[6]<-Sys.info()[5]
+ComputeA<-function(NDNDData){
+  # extract necessary coefficients from the NDNDdata object
+  Gama <- NDNDData$Gama
+  Kapa <- NDNDData$Kapa
+  ns <- NDNDData$ns
+  nn <- NDNDData$nn
   
   # We build three temporary matrix that are going to be used to build the final matrices
   
@@ -50,14 +45,14 @@ ComputeA<-function(Gama,Kapa,ns,nn){
   # Compute Fij matrix --> SumFij
   # Matrix of flows outgoing from the species i to the species j
 
-  Fij<-c%*%e==d%*%t(VI)                         # Matricial product of c-e and d-VI
+  Fij<-c%*%e==d%*%t(VI)                         # Matrix product of c-e and d-VI
                                                 # Fij is the matrix were the two computed matricial product are equal
   SumFij<-apply(Fij,c(1,2),as.numeric)          # Transformation from bolean to numerical values
   
   # Compute Fji matrix --> SumFji
   # Matrix of flows incoming species i from species j 
 
-  Fji<-c%*%e==d%*%t(VJ)                         # Matricial product of c-e and d-VJ
+  Fji<-c%*%e==d%*%t(VJ)                         # Matrix product of c-e and d-VJ
                                                 # Fji is the matrix were the two computed matricial product are equal
   SumFji<-apply(Fji,c(1,2),as.numeric)          # Transformation from bolean to numerical values
  
@@ -100,9 +95,21 @@ ComputeA<-function(Gama,Kapa,ns,nn){
   
   A<-rbind(A1,A2,A3,A4,A5)
   
-  ComputeA_Data<-list(ID,ns,nn,Gama,Kapa,SumFij,SumFji,Kapa2,SumKjFji,A1,A2,A3,A4,A5,A)
-  names(ComputeA_Data)<-c("ID","ns","nn","Gama","Kapa","SumFij","SumFji","Kapa2","SumKjFji","A1","A2","A3","A4","A5","A")
-  save(ComputeA_Data,file=paste("ComputerA_Data_",date_time_name,".RData"))
-  
   return(A)
 }
+
+
+# # Set identification flag
+# 
+# ID<-NULL
+# ID[1]<-as.character(NDNDData$Sys.time)                           # Print Date and Time
+# ID[2]<-R.Version()$version.string                         # Print R version
+# ID[3]<-Sys.info()[1]                                      # Print the Computer software version (Windows, Mac or Linux)
+# ID[4]<-Sys.info()[2]
+# ID[5]<-Sys.info()[3]
+# ID[6]<-Sys.info()[5]
+# 
+# ComputeA_Data<-list(ID,ns,nn,Gama,Kapa,SumFij,SumFji,Kapa2,SumKjFji,A1,A2,A3,A4,A5,A)
+# names(ComputeA_Data)<-c("ID","ns","nn","Gama","Kapa","SumFij","SumFji","Kapa2","SumKjFji","A1","A2","A3","A4","A5","A")
+# save(ComputeA_Data,file=paste("ComputerA_Data_",date_time_name,".RData"))
+
