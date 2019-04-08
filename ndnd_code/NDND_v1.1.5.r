@@ -42,8 +42,8 @@ outputs_dir=paste(wd,'/ndnd_outputs',sep="")                                    
 ## source functions
 NDNDfunctions<-list.files(functions_dir)
 for (i in 1:length(NDNDfunctions)){
-  paste('./ndnd_functions/',NDNDfunctions[i],sep="")
-  source(paste('./ndnd_functions/',NDNDfunctions[i],sep=""))
+  function2source<-paste(functions_dir,"/",NDNDfunctions[i],sep="")
+  source(function2source)
 }
 
 # 3. Extract packages version ---------------------------------------------
