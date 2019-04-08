@@ -25,6 +25,13 @@ NDNDConfigreport<-function(NDNDData){
   cat("R Version : ", a$version.string,"\n")                                      # Prints out the version of R used to run the model
   b<-Sys.info()                                                                     
   cat("Computer Information : ", b[1],b[2],b[3],b[5],"\n")                        # Prints out the software system (Windows, Mac or Linux) version
+  cat("Package information : ","\n")
+  cat(package_version[1,1]," : ",package_version[1,2],"\n")
+  cat(package_version[2,1]," : ",package_version[2,2],"\n")
+  cat(package_version[3,1]," : ",package_version[3,2],"\n")
+  cat(package_version[4,1]," : ",package_version[4,2],"\n")
+  cat(package_version[5,1]," : ",package_version[5,2],"\n")
+  cat(package_version[6,1]," : ",package_version[6,2],"\n")
   cat("Number of Species : ",NDNDData$ns,"\n")                                    # Prints out the number of species
   cat("Length of the simulation : ", NDNDData$Tmax," years","\n")                 # Prints out the length of the simulation
   cat("------------------------------","\n")
@@ -164,9 +171,21 @@ NDNDConfigreport<-function(NDNDData){
   cat("","\n")
   cat("Who eats whom? : Trophic flows matrix (Preys in rows / Predators in columns)","\n")
   cat("","\n")
-  print(NDNDData$Speciesnames)                                                    # Prints out the species names
+  print(NDNDData$Species)                                                    # Prints out the species names
   cat("","\n")
   print(NDNDData$PF)                                                              # Prints out the flows matrix
+  
+  flows_2<-NULL
+  for (i in 1:NDNDData$ns){
+    for (j in 1:NDNDData$ns) {
+      flux<-paste(rownames(as.matrix(NDNDData$PF[i,])),"-->",colnames(as.matrix(NDNDData$PF[i,]))[j])
+      flows_2<-cbind(flows_2,flux)
+    }
+  }
+  flows<-flows_2[which(NDNDData$PFv==1)]
+  
+  cat("","\n")
+  print(flows) 
   
   sink()                                                                          # Closing the file containing the report
 }
