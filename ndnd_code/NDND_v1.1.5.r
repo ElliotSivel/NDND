@@ -28,7 +28,7 @@ Sys.time.NDND=Sys.time()
 # Set your work directories
 # Choose interactively your work directory
 
-wd<-selectDirectory(caption = "Choose your work directory : ")
+wd<-selectDirectory(caption = "Select your work directory : ")
 config_dir=paste(wd,'/ndnd_config',sep="")                                             # Sets the directory to the folder where data files are located
 configreport_dir=paste(wd,'/ndnd_configreport',sep="")                                             # Sets the directory to the folder where data files are located
 data_dir=paste(wd,'/ndnd_data',sep="")                                             # Sets the directory to the folder where data files are located
@@ -45,7 +45,6 @@ for (i in 1:length(NDNDfunctions)){
   paste('./ndnd_functions/',NDNDfunctions[i],sep="")
   source(paste('./ndnd_functions/',NDNDfunctions[i],sep=""))
 }
-
 
 # 3. Extract packages version ---------------------------------------------
 
@@ -67,7 +66,7 @@ package_version<-packages.version.NDND(Session_info = session_info)
 # Choice of the file is set as interactive
 
 setwd(config_dir)                                                            # Sets the directory to the folder where configuration files are located
-config_file<-file.choose()             # Opens a window to choose the configuration file your want to implement.
+config_file<-selectFile(caption = "Select your configuration file : ")             # Opens a window to choose the configuration file your want to implement.
 
 # Loading the data with readDATA
 
