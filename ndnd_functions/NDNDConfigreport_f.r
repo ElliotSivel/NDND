@@ -18,6 +18,14 @@ NDNDConfigreport<-function(NDNDData){
                                                           # Print all the wanted elements of function without printing them in the console
                                                           # File accessible and created after sink()
   
+  # Loading the information about the running session -- systems information, packages, R version, OS,...
+  
+  session_info<-sessionInfo()                     
+  
+  # Extract the version of loaded packages
+  
+  package_version<-packages.version.NDND(Session_info = session_info)
+  
   # Set identification flag
   
   cat("NDND model configuration : ",as.character(NDNDData$Sys.time),"\n")                # Prints out the date and time of running
