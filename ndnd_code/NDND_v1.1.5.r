@@ -46,16 +46,6 @@ for (i in 1:length(NDNDfunctions)){
   source(function2source)
 }
 
-# 3. Extract packages version ---------------------------------------------
-
-# Loading the information about the running session -- systems information, packages, R version, OS,...
-
-session_info<-sessionInfo()                     
-
-# Extract the version of loaded packages
-
-package_version<-packages.version.NDND(Session_info = session_info)
-
 # 4. load files --------------------------------------------------------------
 
 # There are 6 .txt files needed to run the model
