@@ -12,7 +12,7 @@
 
 library(ggplot2)
 
-Plot.NDND<-function(BiomassSeries,Tmax,Species,ns,Plotting){
+plot.NDND<-function(BiomassSeries,Tmax,Species,ns,Plotting){
   if (Plotting==1){
     plot_biom_temp<-as.numeric(as.vector(BiomassSeries))
     plot_species<-rep(Species,byrow=F,each=Tmax)
