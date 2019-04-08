@@ -193,7 +193,9 @@ NDNDConfigreport<-function(NDNDData){
   flows<-flows_2[which(NDNDData$PFv==1)]
   
   cat("","\n")
-  print(flows) 
+  for (i in 1:length(flows)) {
+    cat(flows[i],"\n")
+  }
   
   sink()                                                                          # Closing the file containing the report
 }
