@@ -164,6 +164,6 @@ for (t in 1:(NDNDData$Tmax-1)) {
 
 # 10. Plots ---------------------------------------------------------------
 
-Fig<-Plot.NDND(BiomassSeries,NDNDData$Tmax,NDNDData$Species,NDNDData$ns,NDNDData$Plotting)
+Fig<-plot.NDND(BiomassSeries,NDNDData$Tmax,NDNDData$Species,NDNDData$ns,NDNDData$Plotting)
 Fig
 
