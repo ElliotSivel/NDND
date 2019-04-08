@@ -4,6 +4,7 @@
 #### Version v1.1.5
 #### 08.04.19
 #### Author : Elliot Sivel
+#### License ???
 ###############################################################################################
 
 # 1. Initialization ----------------------------------------------------------
@@ -16,20 +17,23 @@ rm(list=ls())                               # clear the work environment
 
 # Load specific libraries
 
-require(LIM)                                           # loading the library LIM -- The LIM library is used for the sampling of flows -- Soetaert and van Oevelen (2014)
-require(ggplot2)                                       # ggplot
+library(rstudioapi)                                    # Loading the library for directory and file interactive choice
+library(LIM)                                           # Loading the library LIM -- The LIM library is used for the sampling of flows -- Soetaert and van Oevelen (2014)
+library(ggplot2)                                       # Loading the ggplot package -- graphics package 
 
 # Set a time and date tag for the flags
+
 Sys.time.NDND=Sys.time()
 
 # Set your work directories
-
-### to set in function
 # Choose interactively your work directory
-c_info<-Sys.info()[1]
-if (c_info == "Windows") {
-  setwd(choose.dir(caption = "Choose main working directory (/NDND)"))
-} else {setwd(tcltk::tk_choose.dir(caption = "Choose main working directory (/NDND)"))}
+
+wd<-selectDirectory(caption = "Choose your work directory : ")
+
+# c_info<-Sys.info()[1]
+# if (c_info == "Windows") {
+#   setwd(choose.dir(caption = "Choose main working directory (/NDND)"))
+# } else {setwd(tcltk::tk_choose.dir(caption = "Choose main working directory (/NDND)"))}
                                         
 wd<-getwd()                                                 # Get the new work directory and save your work directory in your work environment for later
 config_dir=paste(wd,'/ndnd_config',sep="")                                             # Sets the directory to the folder where data files are located
