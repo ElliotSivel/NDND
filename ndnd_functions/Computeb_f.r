@@ -14,23 +14,22 @@
 # Need 4 vector pf parameters : Rho (Inertia), Sigma (Satiation), Beta (Refuge Biomass) and Mu (Metabolic losses)
 # Need 1 initialization values : nn (Number of possible flows)
 
-Computeb<-function(Biomass,Import,Export,Rho,Sigma,Bta,Mu,nn){
+Computeb<-function(NDNDData,Biomass,t){
   
-  # Set identification flag
-  
-  ID<-NULL
-  ID[1]<-as.character(Sys.time())                           # Print Date and Time
-  ID[2]<-R.Version()$version.string                         # Print R version
-  ID[3]<-Sys.info()[1]                                      # Print the Computer software version (Windows, Mac or Linux)
-  ID[4]<-Sys.info()[2]
-  ID[5]<-Sys.info()[3]
-  ID[6]<-Sys.info()[5]
+  Import=NDNDData$Importall[t,]
+  Export=NDNDData$Exportall[t,]
+  Rho=NDNDData$Rho
+  Sgma=NDNDData$Sgma
+  Bta=NDNDData$Bta
+  Mu=NDNDData$Mu
+  Fu=NDNDData$Fu
+  nn=NDNDData$nn
   
   # Compute the C and D vectors : Simplification of elements of the master equation
   
-  C=as.matrix((1-exp(-Mu))/Mu)                              # Computes C
+  C=as.matrix((1-exp(-(Mu+Fu)))/(Mu+Fu))                              # Computes C
   
-  D=as.matrix(exp(-Mu))                                     # Computes D
+  D=as.matrix(exp(-(Mu+Fu)))                                     # Computes D
   
   # Implementing constraints on biomasses
   # There are 5 constraints -- b1,b2,b3,b4,b5
@@ -45,7 +44,7 @@ Computeb<-function(Biomass,Import,Export,Rho,Sigma,Bta,Mu,nn){
 
   # Third constraint : Flows are bounded above - satiation (Sigma)
   
-  b3<-as.matrix(Biomass*Sigma)                                        # Computes b3
+  b3<-as.matrix(Biomass*Sgma)                                        # Computes b3
 
   # Fourth constraint, flows are positive
   

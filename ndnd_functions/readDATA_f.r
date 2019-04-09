@@ -32,14 +32,15 @@ readDATA<-function(directories,config_file,Data.tag){
     Species<-scan(file=file.names[1],what=character(),quote="")                                             # Read species.txt
     PF<-read.table(file.names[2], header=F, sep="\t",stringsAsFactors = F)                                  # Read fluxes.txt
     Coefficients<-as.matrix(read.table(file.names[3], header=F, sep="\t",stringsAsFactors = F))             # Read coefs.txt
-    Import<-scan(file.names[4], what=numeric())                                                             # Read import.txt
-    Export<-scan(file.names[5], what=numeric())                                                             # Read export.txt
+    Coefficients_mp<-as.matrix(read.table(file.names[4], header=F, sep="\t",stringsAsFactors = F))             # Read coefs.txt
+    Import<-scan(file.names[5], what=numeric())                                                             # Read import.txt
+    Export<-scan(file.names[6], what=numeric())                                                             # Read export.txt
   }  else {stop("Missing file")}                                                                            # If the condition is not verified : Print error message       
   
   # Files are now loaded
   # Defining parameters and vectors from NDNDConfig and the 5 data files
   
-  Tmax<-as.numeric(file.names[6])             # Defining the length of the simulation : Tmax
+  Tmax<-as.numeric(file.names[7])             # Defining the length of the simulation : Tmax
   ns<-as.numeric(length(Species))             # Defining the number of species
   nn<-ns*ns                                   # Defining the number of possible flows in the food web
   
@@ -47,6 +48,8 @@ readDATA<-function(directories,config_file,Data.tag){
   
   colnames(Coefficients)<-Species                                                        # Set the species names as column names in the coefficient dataframe
   rownames(Coefficients)<-c("Biomass","Gama","Kapa","Mu","Rho","Sigma","Bta")            # Set the names of the parameters as row names in the coefficient dataframe
+  colnames(Coefficients_mp)<-Species                                                        # Set the species names as column names in the coefficient dataframe
+  rownames(Coefficients_mp)<-c("Fmp","Bmp")            # Set the names of the parameters as row names in the coefficient dataframe
   colnames(PF)<-Species                                                                  # Set the species names as column names in the flows matrix
   rownames(PF)<-Species                                                                  # Set the species names as row names in the flows matrix
 
@@ -59,6 +62,8 @@ readDATA<-function(directories,config_file,Data.tag){
   Rho<-Coefficients[5,]                   # Row 5 is Rho, the parameter accounting for inertia
   Sgma<-Coefficients[6,]                  # Row 6 is Sigma, the parameter accounting for satiation. It has been renamed Sgma because Sigma is already a function in R
   Bta<-Coefficients[7,]                   # Row 7 is Beta, the value for refuge biomass
+  Fmp<-Coefficients_mp[1,]                # Row 1 is Fmp, the value for F on or above Bmp
+  Bmp<-Coefficients_mp[2,]                # Row 2 is Bmp, the value of Bmp
   
   # Import and Export values can be in vectors or matrices
   # If in a vector : replication of the vector for the length of the simulation (Tmax)
@@ -117,6 +122,8 @@ readDATA<-function(directories,config_file,Data.tag){
                  Rho = Rho,
                  Sgma = Sgma,
                  Bta = Bta,
+                 Fmp = Fmp,
+                 Bmp = Bmp,
                  Importall = Importall,
                  Import = Import,
                  Exportall = Exportall,

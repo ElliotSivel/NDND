@@ -28,8 +28,9 @@ A<-ComputeA(NDNDData)
 # Creates the elements in which the flows, new biomasses are saved
 
 BiomassSeries<-matrix(data = 0, nrow = NDNDData$Tmax, ncol = NDNDData$ns)               # Creates a matrix of dimension Tmax vs number of species full of 0. It is thought be filled with the biomass obtained during the calculations
-FlowSeries<-matrix(data = 0, nrow = NDNDData$Tmax, ncol = sum(NDNDData$PFv))            # Creates a matrix of dimension Tmax vs the number of possible flows. We kept only the links for which we had a 1 in PF. There are 18 links in our topology.
 BiomassSeries[1,]<-NDNDData$Biomass                                                     # We give that the biomass for t = 1 is the initial biomass
+FlowSeries<-matrix(data = 0, nrow = (NDNDData$Tmax-1), ncol = sum(NDNDData$PFv))            # Creates a matrix of dimension Tmax vs the number of possible flows. We kept only the links for which we had a 1 in PF. There are 18 links in our topology.
+FuSeries<-matrix(data = 0, nrow = (NDNDData$Tmax-1), ncol = sum(NDNDData$ns))                                   # Series of fishing mortalities
 
 ## Not implemented yet, needs to be done for further investigation
 # T=1                                                                                     # Set initial time to 1 
@@ -42,23 +43,15 @@ BiomassSeries[1,]<-NDNDData$Biomass                                             
 for (t in 1:(NDNDData$Tmax-1)) {
   print(t)                                        # We want to be able to see the state of the simulation
   
-  # Select the import and export values for the simulation year in Importall and Exportall
+  NDNDData$Fu=ComputeFu(NDNDData,BiomassSeries[t,]) # Compute fishing mortality
   
-  Import<-NDNDData$Importall[t,]
-  Export<-NDNDData$Exportall[t,]
-  
-  # Compute b
-  
-  #b<-Computeb(BiomassSeries[t,],Import,Export,NDNDData$Rho,NDNDData$Sigma,NDNDData$Beta,NDNDData$Mu,NDNDData$nn)
-  b<-Computeb(BiomassSeries[t,],Import,Export,NDNDData$Rho,NDNDData$Sgma,NDNDData$Bta,NDNDData$Mu,NDNDData$nn)
-  #sim_b<-cbind(sim_b,b)#to be removed?
+  b<-Computeb(NDNDData,BiomassSeries[t,],t)   # Compute b
   
   # Delete irrelevant constraints using possibleAb
   
   Abp<-possibleAb(A,b,NDNDData$PFv)
   pA<-Abp[[1]];pb<-Abp[[2]]               # Defines two matrices with the existing constraint on flows and biomasses
-  #sim_pb<-cbind(sim_pb,pb)#to be removed?
-  
+
   ##### POSSIBLE FUNCTION
   # The LIM defines three possible constraints
   # For inequalities, the package formulates it Gx >= H
@@ -84,20 +77,21 @@ for (t in 1:(NDNDData$Tmax-1)) {
   
   # Reattributing the flows values
   
-  F<-rep(0,NDNDData$nn)                                               # Creating a vector of 0 and of length nn
-  F[NDNDData$PFv==1]<-F0                                              # Attribute the flow values at the right place according to the vector PFv
-  
-  FlowSeries[t,]<-F0
+  Fluxes<-rep(0,NDNDData$nn)                                               # Creating a vector of 0 and of length nn
+  Fluxes[NDNDData$PFv==1]<-F0                                              # Attribute the flow values at the right place according to the vector PFv
   
   # Compute biomass at the next time step
   
-  BiomassSeries[t+1,]=ComputeBiomass(Biomass = BiomassSeries[t,],F=F,Import = Import,Export = Export,Gama = NDNDData$Gama,Mu = NDNDData$Mu,Kapa = NDNDData$Kapa,ns = NDNDData$ns)
+  BiomassSeries[t+1,]=ComputeBiomass(NDNDData,BiomassSeries[t,],Fluxes,t)
+  FuSeries[t,]=NDNDData$Fu  # store fishing mortalities
+  FlowSeries[t,]<-F0 # store trophic fluxes
+  
 }
 
 
 # 3. return simulation outputs  -------------------------------------------
 
-NDNDOutput=list(BiomassSeries=BiomassSeries,FlowSeries=FlowSeries)
+NDNDOutput=list(BiomassSeries=BiomassSeries,FlowSeries=FlowSeries,FuSeries = FuSeries)
 NDNDCode=NULL
 maincodefile=paste(NDNDData$directories$code_dir,'/NDND_main.r',sep='')
 if (file.exists(maincodefile)==TRUE){

@@ -18,21 +18,29 @@
 # Need parameters values for all species for Gama (assimilation efficiency rate), Mu (metabolic losses) and Kapa (food digestability)
 # Need thee number of species ns
 
-ComputeBiomass<-function(Biomass,F,Import,Export,Gama,Mu,Kapa,ns){
+#ComputeBiomass<-function(Biomass,F,Import,Export,Gama,Mu,Kapa,ns){
+ComputeBiomass<-function(NDNDData,CurrentBiomass,Fluxes,t){
+  Import=NDNDData$Importall[t,]
+  Export=NDNDData$Exportall[t,]
+  Gama=NDNDData$Gama
+  Mu=NDNDData$Mu
+  Fu=NDNDData$Fu
+  Kapa=NDNDData$Kapa
+  ns=NDNDData$ns
   
   # As in Computeb, Computation of constants C and D
   
-  C=as.matrix((1-exp(-Mu))/Mu)                          # Computes C
-  D=as.matrix(exp(-Mu))                                 # Computes D
+  C=as.matrix((1-exp(-(Mu+Fu)))/(Mu+Fu))                          # Computes C
+  D=as.matrix(exp(-(Mu+Fu)))                                 # Computes D
   
   # The sampling of flows is going to be done for a vector of length ns^2
   # To apply compute the new biomasses -- Need elements of length ns
   
-  dim(F)<-c(ns,ns)                                      # Resahpe it in a matrix of dimension ns*ns
-  FM<-t(F)                                              # Transpose F
+  dim(Fluxes)<-c(ns,ns)                                      # Resahpe it in a matrix of dimension ns*ns
+  FM<-t(Fluxes)                                              # Transpose F
   NewBiomass<-matrix(0,ns)                              # Define an empty vector which length is ns
   for (i in 1:ns){                                                                                       # For each species we compute the new biomass by applying the master equation
-    NewBiomass[i]=D[i]*Biomass[i]+C[i]*(Gama[i]*sum(FM[,i]*Kapa)-sum(FM[i,])+Import[i]-Export[i])
+    NewBiomass[i]=D[i]*CurrentBiomass[i]+C[i]*(Gama[i]*sum(FM[,i]*Kapa)-sum(FM[i,])+Import[i]-Export[i])
   }
   
   return(NewBiomass)
