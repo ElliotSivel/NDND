@@ -49,6 +49,6 @@ save(NDNDSimulation,file=paste(NDNDData$directories$outputs_dir,"/NDNDSim_",form
 
 # 6. Plots ---------------------------------------------------------------
 
-#Fig<-plot.NDND(BiomassSeries,NDNDData$Tmax,NDNDData$Species,NDNDData$ns,NDNDData$Plotting)
-#Fig
+Fig<-plot.NDND(NDNDSimulation = NDNDSimulation)
+Fig
 

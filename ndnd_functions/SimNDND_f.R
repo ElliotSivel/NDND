@@ -88,6 +88,16 @@ for (t in 1:(NDNDData$Tmax-1)) {
   
 }
 
+colnames(BiomassSeries)<-NDNDData$Species
+rownames(BiomassSeries)<-1:NDNDData$Tmax
+colnames(FlowSeries)<-NDNDData$flows
+rownames(FlowSeries)<-1:(NDNDData$Tmax-1)
+colnames(FuSeries)<-NDNDData$Species
+rownames(FuSeries)<-1:(NDNDData$Tmax-1)
+
+BiomassSeries<-as.data.frame(BiomassSeries)
+FlowSeries<-as.data.frame(FlowSeries)
+FuSeries<-as.data.frame(FuSeries)
 
 # 3. return simulation outputs  -------------------------------------------
 

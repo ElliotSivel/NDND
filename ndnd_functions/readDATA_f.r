@@ -104,9 +104,18 @@ readDATA<-function(directories,config_file,Data.tag){
   
   PFv=as.vector(t(PF))                  # Transform the possible flows matrix in a single vector of length nn
   
+  flows_2<-NULL
+  for (i in 1:ns){
+    for (j in 1:ns) {
+      flux<-paste(rownames(as.matrix(PF[i,])),"-->",colnames(as.matrix(PF[i,]))[j])
+      flows_2<-cbind(flows_2,flux)
+    }
+  }
+  flows<-flows_2[which(PFv==1)]
+  
   # Defining if the time series are going to be plotted
   
-  Plotting<- file.names[7]                   # Binary parameter (0 = no plot ; 1 = plot)               
+  Plotting<- file.names[8]                   # Binary parameter (0 = no plot ; 1 = plot)               
   
   # Merging all created elements na list
   
@@ -130,6 +139,7 @@ readDATA<-function(directories,config_file,Data.tag){
                  Export =Export,
                  PF = PF,
                  PFv = PFv,
+                 flows = flows,
                  Plotting = Plotting,
                  directories = directories)
   

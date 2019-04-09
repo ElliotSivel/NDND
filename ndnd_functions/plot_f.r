@@ -10,19 +10,33 @@
 # Function for plotting the time series of biomass
 # For plotting, it uses the ggplot2 package
 
-library(ggplot2)
+install.packages("tidyverse")
+library(tidyverse)
 
-plot.NDND<-function(BiomassSeries,Tmax,Species,ns,Plotting){
-  if (Plotting==1){
-    plot_biom_temp<-as.numeric(as.vector(BiomassSeries))
-    plot_species<-rep(Species,byrow=F,each=Tmax)
-    plot_years<-rep(1:Tmax,times=ns)
-    plot_biom<-as.data.frame(cbind(plot_years,plot_biom_temp,plot_species))
-    plot<-ggplot(plot_biom,aes(x=as.numeric(plot_years),y=as.numeric(plot_biom_temp)))+geom_line()+facet_wrap(~plot_species,ncol=3)
-  } else {print("Plotting parameter =0 ; no plotting configurated")}
+
+plot.NDND<-function(NDNDSimulation){
+
+  df_b<-gather(NDNDSimulation$Output$BiomassSeries,key = "Species" , value = "Biomass")
+  gg2_b<-ggplot(df_b,aes(x=rep(1:NDNDSimulation$Data$Tmax,times=NDNDSimulation$Data$ns),y=Biomass))+
+    geom_line()+
+    facet_wrap(~factor(Species,levels = NDNDSimulation$Data$Species),ncol=3,scale="free")+
+    xlab("Years")
+  
+  df_flow<-gather(NDNDSimulation$Output$FlowSeries,key = "Flow" , value = "Biomass")
+  gg2_flow<-ggplot(df_flow,aes(x=rep(1:(NDNDSimulation$Data$Tmax-1),times=length(NDNDSimulation$Data$flows)),y=Biomass))+
+    geom_line()+
+    facet_wrap(~factor(Flow,levels = NDNDSimulation$Data$flows),ncol=5,scale="free")+
+    xlab("Years")
+  
+  df_fu<-gather(NDNDSimulation$Output$FuSeries,key = "Species" , value = "Fu")
+  gg2_fu<-ggplot(df_fu,aes(x=rep(1:(NDNDSimulation$Data$Tmax-1),times=NDNDSimulation$Data$ns),y=Fu))+
+    geom_line()+
+    facet_wrap(~factor(Species,levels = NDNDSimulation$Data$Species),ncol=3)+
+    xlab("Years")
+
+ gg<-list(gg2_b,gg2_flow,gg2_fu)
+ return(gg)
 }
-
-
 
 
 
