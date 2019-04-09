@@ -20,7 +20,7 @@ rm(list=ls())                               # clear the work environment
 library(rstudioapi)                                    # Loading the library for directory and file interactive choice
 library(LIM)                                           # Loading the library LIM -- The LIM library is used for the sampling of flows -- Soetaert and van Oevelen (2014)
 library(ggplot2)                                       # Loading the ggplot package -- graphics package 
-
+library(tidyverse)
 
 # 2a. prepare data file ---------------------------------------------------
 
@@ -50,5 +50,5 @@ save(NDNDSimulation,file=paste(NDNDData$directories$outputs_dir,"/NDNDSim_",form
 # 6. Plots ---------------------------------------------------------------
 
 Fig<-plot.NDND(NDNDSimulation = NDNDSimulation)
-Fig
+Fig[[2]]
 

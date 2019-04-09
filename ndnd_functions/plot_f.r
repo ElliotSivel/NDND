@@ -10,10 +10,6 @@
 # Function for plotting the time series of biomass
 # For plotting, it uses the ggplot2 package
 
-install.packages("tidyverse")
-library(tidyverse)
-
-
 plot.NDND<-function(NDNDSimulation){
 
   df_b<-gather(NDNDSimulation$Output$BiomassSeries,key = "Species" , value = "Biomass")
