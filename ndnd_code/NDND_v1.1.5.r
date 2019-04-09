@@ -23,7 +23,7 @@ library(ggplot2)                                       # Loading the ggplot pack
 
 # 2. load data file --------------------------------------------------------------
 
-load('NDNDData.Rdata')
+load(file="NDNDData.Rdata")
 
 # 3. Source the functions -------------------------------------------------
 ## source functions
@@ -123,6 +123,21 @@ for (t in 1:(NDNDData$Tmax-1)) {
 
 
 # 6. save simulation outputs  -------------------------------------------
+
+NDNDOutput=list(BiomassSeries=BiomassSeries,FlowSeries=FlowSeries)
+NDNDCode=NULL
+NDNDCode$main <- scan(paste(NDNDData$directories$code_dir,'/NDND_v1.1.5.r',sep=''),what="",sep="\n")  # reads the current file and store it into the variable 'code'
+for (i in 1:length(NDNDfunctions)){
+  function2scan<-paste(NDNDData$directories$functions_dir,"/",NDNDfunctions[i],sep="")
+  NDNDCode$functions[[i]]=scan(function2scan,what="",sep="\n")
+}
+NDNDSimulation=list(Simulation.tag=Simulation.tag,
+                    NDNDData=NDNDData,
+                    NDNDOutput=NDNDOutput,
+                    NDNDCode=NDNDCode)
+
+save(NDNDSimulation,file=paste(NDNDData$directories$outputs_dir,"/NDNDSim_",format(Simulation.tag,"%Y_%m_%d_%H_%M_%S"),".RData",sep = ""))
+
 # 10. Plots ---------------------------------------------------------------
 
 Fig<-plot.NDND(BiomassSeries,NDNDData$Tmax,NDNDData$Species,NDNDData$ns,NDNDData$Plotting)

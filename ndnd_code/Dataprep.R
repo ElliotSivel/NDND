@@ -9,6 +9,7 @@ Data.tag=Sys.time()
 
 directories=NULL
 wd<-selectDirectory(caption = "Select your work directory : ")
+directories$code_dir=paste(wd,'/ndnd_code',sep="")                                             # Sets the directory to the folder where data files are located
 directories$config_dir=paste(wd,'/ndnd_config',sep="")                                             # Sets the directory to the folder where data files are located
 directories$configreport_dir=paste(wd,'/ndnd_configreport',sep="")                                             # Sets the directory to the folder where data files are located
 directories$data_dir=paste(wd,'/ndnd_data',sep="")                                             # Sets the directory to the folder where data files are located
