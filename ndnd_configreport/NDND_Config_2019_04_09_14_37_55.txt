@@ -1,0 +1,188 @@
+NDND model configuration :  2019-04-09 14:37:55 
+R Version :  R version 3.5.3 (2019-03-11) 
+Computer Information :  Darwin 18.5.0 Darwin Kernel Version 18.5.0: Mon Mar 11 20:40:32 PDT 2019; root:xnu-4903.251.3~3/RELEASE_X86_64 x86_64 
+Package information :  
+ggplot2  :  3.1.1 
+LIM  :  1.4.6 
+diagram  :  1.6.4 
+shape  :  1.4.4 
+limSolve  :  1.5.5.3 
+rstudioapi  :  0.10 
+Number of Species :  8 
+Length of the simulation :  25  years 
+------------------------------ 
+Species names :  
+ 
+[1] "Phytoplankton" "herbivorouspk" "omnivorouspk"  "Benthos"       "Pelagics"     
+[6] "Demersals"     "Mammals"       "Birds"        
+------------------------------ 
+Starting Biomasses :  
+ 
+Phytoplankton herbivorouspk  omnivorouspk       Benthos      Pelagics     Demersals 
+       25.000        23.000        12.900        66.000         0.360         1.180 
+      Mammals         Birds 
+        0.340         0.007 
+------------------------------ 
+Potential assimilation efficienties (gamma) : 
+ 
+Phytoplankton herbivorouspk  omnivorouspk       Benthos      Pelagics     Demersals 
+         1.00          1.00          1.00          0.94          0.90          0.93 
+      Mammals         Birds 
+         1.00          0.84 
+------------------------------ 
+Food quality : 
+ 
+Phytoplankton herbivorouspk  omnivorouspk       Benthos      Pelagics     Demersals 
+         0.65          0.90          0.90          0.60          0.90          0.85 
+      Mammals         Birds 
+         0.00          0.00 
+------------------------------ 
+Other intial metabolic losses : 
+ 
+Phytoplankton herbivorouspk  omnivorouspk       Benthos      Pelagics     Demersals 
+         6.74          8.40          5.50          1.50          2.85          1.65 
+      Mammals         Birds 
+         5.50         60.00 
+------------------------------ 
+Inertia : 
+ 
+Phytoplankton herbivorouspk  omnivorouspk       Benthos      Pelagics     Demersals 
+        12.90          7.60          3.10          0.74          0.90          0.25 
+      Mammals         Birds 
+         0.11          0.81 
+------------------------------ 
+Maximum biomass growth rate : 
+ 
+Phytoplankton herbivorouspk  omnivorouspk       Benthos      Pelagics     Demersals 
+ 4.003122e+05  1.998196e+03  2.219795e+01  2.095936e+00  2.459603e+00  1.284025e+00 
+      Mammals         Birds 
+ 1.116278e+00  2.247908e+00 
+------------------------------ 
+Maximum biomass decline rate : 
+ 
+Phytoplankton herbivorouspk  omnivorouspk       Benthos      Pelagics     Demersals 
+ 2.498050e-06  5.004514e-04  4.504920e-02  4.771139e-01  4.065697e-01  7.788008e-01 
+      Mammals         Birds 
+ 8.958341e-01  4.448581e-01 
+------------------------------ 
+Satiation : 
+ 
+NULL
+------------------------------ 
+Food requirements with stables biomass (no predation) :  
+ 
+Phytoplankton herbivorouspk  omnivorouspk       Benthos      Pelagics     Demersals 
+     6.740000      8.400000      5.500000      1.595745      3.166667      1.774194 
+      Mammals         Birds 
+     5.500000     71.428571 
+------------------------------ 
+Food requirements in year 2 with stable biomass (no predation) :  
+ 
+Phytoplankton herbivorouspk  omnivorouspk       Benthos      Pelagics     Demersals 
+   168.500000    193.200000     70.950000    105.319149      1.140000      2.093548 
+      Mammals         Birds 
+     1.870000      0.500000 
+------------------------------ 
+Food requirements with max decrease in biomass (no predation) :  
+ 
+Phytoplankton herbivorouspk  omnivorouspk       Benthos      Pelagics     Demersals 
+ -0.007963623   0.002315427   0.226217871   0.521700298   1.172096004   1.288457823 
+      Mammals         Birds 
+  4.924736775  31.775576159 
+------------------------------ 
+ 
+All satiation values high enough for calculation 
+ 
+------------------------------ 
+Refuge Biomass (Beta) :  
+ 
+NULL
+------------------------------ 
+Biomass import in the system :  
+ 
+  Phytoplankton herbivorouspk omnivorouspk Benthos Pelagics Demersals Mammals Birds
+1           800             8            2       0        0         0       0     0
+2           800             8            2       0        0         0       0     0
+3           800             8            2       0        0         0       0     0
+4           800             8            2       0        0         0       0     0
+5           800             8            2       0        0         0       0     0
+6           800             8            2       0        0         0       0     0
+ 
+Mean Import :  
+Phytoplankton herbivorouspk  omnivorouspk       Benthos      Pelagics     Demersals 
+          800             8             2             0             0             0 
+      Mammals         Birds 
+            0             0 
+ 
+Variance of import :  
+Phytoplankton herbivorouspk  omnivorouspk       Benthos      Pelagics     Demersals 
+            0             0             0             0             0             0 
+      Mammals         Birds 
+            0             0 
+------------------------------ 
+ 
+Biomass export out of the system :  
+ 
+  Phytoplankton herbivorouspk omnivorouspk Benthos Pelagics Demersals Mammals Birds
+1             0             0            0       0        0         0       0     0
+2             0             0            0       0        0         0       0     0
+3             0             0            0       0        0         0       0     0
+4             0             0            0       0        0         0       0     0
+5             0             0            0       0        0         0       0     0
+6             0             0            0       0        0         0       0     0
+ 
+Mean Export :  
+Phytoplankton herbivorouspk  omnivorouspk       Benthos      Pelagics     Demersals 
+            0             0             0             0             0             0 
+      Mammals         Birds 
+            0             0 
+ 
+Variance of export :  
+Phytoplankton herbivorouspk  omnivorouspk       Benthos      Pelagics     Demersals 
+            0             0             0             0             0             0 
+      Mammals         Birds 
+            0             0 
+------------------------------ 
+ 
+Who eats whom? : Trophic flows matrix (Preys in rows / Predators in columns) 
+ 
+[1] "Phytoplankton" "herbivorouspk" "omnivorouspk"  "Benthos"       "Pelagics"     
+[6] "Demersals"     "Mammals"       "Birds"        
+ 
+              Phytoplankton herbivorouspk omnivorouspk Benthos Pelagics Demersals Mammals
+Phytoplankton             0             1            1       1        0         0       0
+herbivorouspk             0             0            1       0        1         0       0
+omnivorouspk              0             0            1       0        1         1       1
+Benthos                   0             0            0       1        0         1       0
+Pelagics                  0             0            0       0        1         1       1
+Demersals                 0             0            0       0        0         1       1
+Mammals                   0             0            0       0        0         0       0
+Birds                     0             0            0       0        0         0       0
+              Birds
+Phytoplankton     0
+herbivorouspk     0
+omnivorouspk      1
+Benthos           0
+Pelagics          1
+Demersals         0
+Mammals           0
+Birds             0
+ 
+Phytoplankton --> herbivorouspk 
+Phytoplankton --> omnivorouspk 
+Phytoplankton --> Benthos 
+herbivorouspk --> omnivorouspk 
+herbivorouspk --> Pelagics 
+omnivorouspk --> omnivorouspk 
+omnivorouspk --> Pelagics 
+omnivorouspk --> Demersals 
+omnivorouspk --> Mammals 
+omnivorouspk --> Birds 
+Benthos --> Benthos 
+Benthos --> Demersals 
+Pelagics --> Pelagics 
+Pelagics --> Demersals 
+Pelagics --> Mammals 
+Pelagics --> Birds 
+Demersals --> Demersals 
+Demersals --> Mammals 
