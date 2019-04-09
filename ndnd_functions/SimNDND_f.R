@@ -1,45 +1,18 @@
 ###############################################################################################
 #### The Non-Deterministic Network Model (NDND) Mullon et al., 2009 , Planque et al., 2014
-#### Model simulation
+#### Main simulation function
 #### Version v1.1.5
-#### 08.04.19
-#### Author : Elliot Sivel
+#### 09.04.19
+#### Author : Elliot Sivel & Co
 #### License ???
 ###############################################################################################
 
-# 1. Initialization ----------------------------------------------------------
-
-# Initialize the simulation : Clear your work environment
-
-graphics.off()                              # clear all graphical windows
-cat("\014")                                 # clear console
-rm(list=ls())                               # clear the work environment
-
-# Load specific libraries
-
-library(rstudioapi)                                    # Loading the library for directory and file interactive choice
-library(LIM)                                           # Loading the library LIM -- The LIM library is used for the sampling of flows -- Soetaert and van Oevelen (2014)
-library(ggplot2)                                       # Loading the ggplot package -- graphics package 
-
-# 2. load data file --------------------------------------------------------------
-
-load(file="NDNDData.Rdata")
-
-# 3. Source the functions -------------------------------------------------
-## source functions
-
-NDNDfunctions<-list.files(NDNDData$directories$functions_dir)
-for (i in 1:length(NDNDfunctions)){
-  function2source<-paste(NDNDData$directories$functions_dir,"/",NDNDfunctions[i],sep="")
-  source(function2source)
-}
-
-# Set a time and date tag for the flags
-
-Simulation.tag=Sys.time()
-
-
-# 4. Initialization of the simulation -------------------------------------
+SimNDND <- function(NDNDData){
+  # Set a time and date tag for the flags
+  
+  Simulation.tag=Sys.time()
+  
+  # 1. Initialization of the simulation -------------------------------------
 
 # NDND model is based on a random sampling of flows in a restricted range of possibilities
 # Range of possibilites restricted by constraints expressed as inequalities
@@ -62,7 +35,7 @@ BiomassSeries[1,]<-NDNDData$Biomass                                             
 # T=1                                                                                     # Set initial time to 1 
 # Tcrash=0                                                                                # Set Tcrash to 0
 
-# 5. Main loop -----------------------------------------------------------------
+# 2. Main loop -----------------------------------------------------------------
 
 # The model run over Tmax years
 
@@ -122,24 +95,23 @@ for (t in 1:(NDNDData$Tmax-1)) {
 }
 
 
-# 6. save simulation outputs  -------------------------------------------
+# 3. return simulation outputs  -------------------------------------------
 
 NDNDOutput=list(BiomassSeries=BiomassSeries,FlowSeries=FlowSeries)
 NDNDCode=NULL
-NDNDCode$main <- scan(paste(NDNDData$directories$code_dir,'/NDND_v1.1.5.r',sep=''),what="",sep="\n")  # reads the current file and store it into the variable 'code'
+maincodefile=paste(NDNDData$directories$code_dir,'/NDND_main.r',sep='')
+if (file.exists(maincodefile)==TRUE){
+  NDNDCode$main <- scan(maincodefile,what="",sep="\n")
+  }  # reads the current file and store it into the variable 'code'
 for (i in 1:length(NDNDfunctions)){
   function2scan<-paste(NDNDData$directories$functions_dir,"/",NDNDfunctions[i],sep="")
   NDNDCode$functions[[i]]=scan(function2scan,what="",sep="\n")
 }
 NDNDSimulation=list(Simulation.tag=Simulation.tag,
-                    NDNDData=NDNDData,
-                    NDNDOutput=NDNDOutput,
-                    NDNDCode=NDNDCode)
+                    Data=NDNDData,
+                    Output=NDNDOutput,
+                    Code=NDNDCode)
 
-save(NDNDSimulation,file=paste(NDNDData$directories$outputs_dir,"/NDNDSim_",format(Simulation.tag,"%Y_%m_%d_%H_%M_%S"),".RData",sep = ""))
-
-# 10. Plots ---------------------------------------------------------------
-
-Fig<-plot.NDND(BiomassSeries,NDNDData$Tmax,NDNDData$Species,NDNDData$ns,NDNDData$Plotting)
-Fig
+return(NDNDSimulation)
+}
 

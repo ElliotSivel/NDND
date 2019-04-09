@@ -1,8 +1,15 @@
-NDND model configuration :  2019-04-02 15:23:00 
+NDND model configuration :  2019-04-09 09:18:36 
 R Version :  R version 3.5.3 (2019-03-11) 
-Computer Information :  Windows >= 8 x64 build 9200 x86-64 
+Computer Information :  Darwin 18.5.0 Darwin Kernel Version 18.5.0: Mon Mar 11 20:40:32 PDT 2019; root:xnu-4903.251.3~3/RELEASE_X86_64 x86_64 
+Package information :  
+ggplot2  :  3.1.1 
+LIM  :  1.4.6 
+diagram  :  1.6.4 
+shape  :  1.4.4 
+limSolve  :  1.5.5.3 
+rstudioapi  :  0.10 
 Number of Species :  8 
-Length of the simulation :  100  years 
+Length of the simulation :  25  years 
 ------------------------------ 
 Species names :  
  
@@ -60,10 +67,7 @@ Phytoplankton herbivorouspk  omnivorouspk       Benthos      Pelagics     Demers
 ------------------------------ 
 Satiation : 
  
-Phytoplankton herbivorouspk  omnivorouspk       Benthos      Pelagics     Demersals 
-          NaN         128.0          42.0          25.2          13.5           5.5 
-      Mammals         Birds 
-         10.9         123.0 
+NULL
 ------------------------------ 
 Food requirements with stables biomass (no predation) :  
  
@@ -92,10 +96,7 @@ All satiation values high enough for calculation
 ------------------------------ 
 Refuge Biomass (Beta) :  
  
-Phytoplankton herbivorouspk  omnivorouspk       Benthos      Pelagics     Demersals 
-       0.2500        0.2300        0.1300        0.6600        0.0040        0.0120 
-      Mammals         Birds 
-       0.0034        0.0001 
+NULL
 ------------------------------ 
 Biomass import in the system :  
  
@@ -145,14 +146,43 @@ Phytoplankton herbivorouspk  omnivorouspk       Benthos      Pelagics     Demers
  
 Who eats whom? : Trophic flows matrix (Preys in rows / Predators in columns) 
  
-NULL
+[1] "Phytoplankton" "herbivorouspk" "omnivorouspk"  "Benthos"       "Pelagics"     
+[6] "Demersals"     "Mammals"       "Birds"        
  
-              Phytoplankton herbivorouspk omnivorouspk Benthos Pelagics Demersals Mammals Birds
-Phytoplankton             0             1            1       1        0         0       0     0
-herbivorouspk             0             0            1       0        1         0       0     0
-omnivorouspk              0             0            1       0        1         1       1     1
-Benthos                   0             0            0       1        0         1       0     0
-Pelagics                  0             0            0       0        1         1       1     1
-Demersals                 0             0            0       0        0         1       1     0
-Mammals                   0             0            0       0        0         0       0     0
-Birds                     0             0            0       0        0         0       0     0
+              Phytoplankton herbivorouspk omnivorouspk Benthos Pelagics Demersals Mammals
+Phytoplankton             0             1            1       1        0         0       0
+herbivorouspk             0             0            1       0        1         0       0
+omnivorouspk              0             0            1       0        1         1       1
+Benthos                   0             0            0       1        0         1       0
+Pelagics                  0             0            0       0        1         1       1
+Demersals                 0             0            0       0        0         1       1
+Mammals                   0             0            0       0        0         0       0
+Birds                     0             0            0       0        0         0       0
+              Birds
+Phytoplankton     0
+herbivorouspk     0
+omnivorouspk      1
+Benthos           0
+Pelagics          1
+Demersals         0
+Mammals           0
+Birds             0
+ 
+Phytoplankton --> herbivorouspk 
+Phytoplankton --> omnivorouspk 
+Phytoplankton --> Benthos 
+herbivorouspk --> omnivorouspk 
+herbivorouspk --> Pelagics 
+omnivorouspk --> omnivorouspk 
+omnivorouspk --> Pelagics 
+omnivorouspk --> Demersals 
+omnivorouspk --> Mammals 
+omnivorouspk --> Birds 
+Benthos --> Benthos 
+Benthos --> Demersals 
+Pelagics --> Pelagics 
+Pelagics --> Demersals 
+Pelagics --> Mammals 
+Pelagics --> Birds 
+Demersals --> Demersals 
+Demersals --> Mammals 
