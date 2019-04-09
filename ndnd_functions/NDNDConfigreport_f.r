@@ -12,9 +12,9 @@
 # The list of species, the time of simulation, the parameter values and some other information about the system
 # To run it needs the NDNDData file created by the function readDATA
 
-NDNDConfigreport<-function(NDNDData){
+NDNDConfigreport<-function(directory=".",NDNDData){
   
-  sink(paste("NDND_Config_",paste(format(NDNDData$Sys.time,"%Y_%m_%d_%H_%M_%S"),sep = ""),".txt",sep=""))        # Opens a file with the defined name, in the directory indicated in the simulation code
+  sink(paste(directory,"/NDND_Config_",paste(format(NDNDData$Data.tag,"%Y_%m_%d_%H_%M_%S"),sep = ""),".txt",sep=""))        # Opens a file with the defined name, in the directory indicated in the simulation code
                                                           # Print all the wanted elements of function without printing them in the console
                                                           # File accessible and created after sink()
   
@@ -24,22 +24,19 @@ NDNDConfigreport<-function(NDNDData){
   
   # Extract the version of loaded packages
   
-  package_version<-packages.version.NDND(Session_info = session_info)
+  Package_version<-packages.version.NDND(Session_info = session_info)
   
   # Set identification flag
   
-  cat("NDND model configuration : ",as.character(NDNDData$Sys.time),"\n")                # Prints out the date and time of running
+  cat("NDND model configuration : ",as.character(NDNDData$Data.tag),"\n")                # Prints out the date and time of running
   a<-R.Version()                                                                  
   cat("R Version : ", a$version.string,"\n")                                      # Prints out the version of R used to run the model
   b<-Sys.info()                                                                     
   cat("Computer Information : ", b[1],b[2],b[3],b[5],"\n")                        # Prints out the software system (Windows, Mac or Linux) version
   cat("Package information : ","\n")
-  cat(package_version[1,1]," : ",package_version[1,2],"\n")
-  cat(package_version[2,1]," : ",package_version[2,2],"\n")
-  cat(package_version[3,1]," : ",package_version[3,2],"\n")
-  cat(package_version[4,1]," : ",package_version[4,2],"\n")
-  cat(package_version[5,1]," : ",package_version[5,2],"\n")
-  cat(package_version[6,1]," : ",package_version[6,2],"\n")
+  for (i in 1:dim(Package_version)[1]){
+    cat(Package_version[i,1]," : ",Package_version[i,2],"\n")
+    }
   cat("Number of Species : ",NDNDData$ns,"\n")                                    # Prints out the number of species
   cat("Length of the simulation : ", NDNDData$Tmax," years","\n")                 # Prints out the length of the simulation
   cat("------------------------------","\n")

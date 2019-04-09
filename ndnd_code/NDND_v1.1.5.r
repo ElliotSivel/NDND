@@ -21,60 +21,25 @@ library(rstudioapi)                                    # Loading the library for
 library(LIM)                                           # Loading the library LIM -- The LIM library is used for the sampling of flows -- Soetaert and van Oevelen (2014)
 library(ggplot2)                                       # Loading the ggplot package -- graphics package 
 
-# Set a time and date tag for the flags
+# 2. load data file --------------------------------------------------------------
 
-Sys.time.NDND=Sys.time()
+load('NDNDData.Rdata')
 
-# Set your work directories
-# Choose interactively your work directory
-
-wd<-selectDirectory(caption = "Select your work directory : ")
-config_dir=paste(wd,'/ndnd_config',sep="")                                             # Sets the directory to the folder where data files are located
-configreport_dir=paste(wd,'/ndnd_configreport',sep="")                                             # Sets the directory to the folder where data files are located
-data_dir=paste(wd,'/ndnd_data',sep="")                                             # Sets the directory to the folder where data files are located
-files_dir=paste(wd,'/ndnd_files',sep="")                                             # Sets the directory to the folder where data files are located
-functions_dir=paste(wd,'/ndnd_functions',sep="")                                             # Sets the directory to the folder where data files are located
-outputs_dir=paste(wd,'/ndnd_outputs',sep="")                                             # Sets the directory to the folder where data files are located
-
-
-# 2. Source the functions -------------------------------------------------
-
+# 3. Source the functions -------------------------------------------------
 ## source functions
-NDNDfunctions<-list.files(functions_dir)
+
+NDNDfunctions<-list.files(NDNDData$directories$functions_dir)
 for (i in 1:length(NDNDfunctions)){
-  function2source<-paste(functions_dir,"/",NDNDfunctions[i],sep="")
+  function2source<-paste(NDNDData$directories$functions_dir,"/",NDNDfunctions[i],sep="")
   source(function2source)
 }
 
-# 4. load files --------------------------------------------------------------
+# Set a time and date tag for the flags
 
-# There are 6 .txt files needed to run the model
-# Data files (5) : species.txt, fluxes.txt, coefs.txt, import.txt, export.txt
-# Configuration file : NDNDConfig -- Names of the data files, length of simulation and plotting parameter
+Simulation.tag=Sys.time()
 
-# Load the Configuration file
-# Choice of the file is set as interactive
 
-setwd(config_dir)                                                            # Sets the directory to the folder where configuration files are located
-config_file<-selectFile(caption = "Select your configuration file : ")             # Opens a window to choose the configuration file your want to implement.
-
-# Loading the data with readDATA
-
-NDNDData<-readDATA(config_file=config_file,files_dir=files_dir,Sys.time.NDND = Sys.time.NDND)                       # Applies the readDATA function
-
-# Saving the NDNDData.RData in a particular file
-
-save(NDNDData,file=paste(data_dir,"/NDNDData_",paste(format(Sys.time.NDND,"%Y_%m_%d_%H_%M_%S"),sep = ""),".RData",sep=""))             # Save NDNDData
-
-# 4. Report Model Configuration --------------------------------------------
-
-# Create a report of the input data and parametrization
-
-setwd(configreport_dir)                                  # Set the directory to the folder where configuration reports are saved 
-NDNDConfigreport(NDNDData = NDNDData)                         # Applies the NDNDConfigreport function
-                                                              # Creates the configuration report
-
-# 5. Compute A : Matrix of constraint on flows ----------------------------
+# 4. Initialization of the simulation -------------------------------------
 
 # NDND model is based on a random sampling of flows in a restricted range of possibilities
 # Range of possibilites restricted by constraints expressed as inequalities
@@ -85,24 +50,19 @@ NDNDConfigreport(NDNDData = NDNDData)                         # Applies the NDND
 
 # Compute matrix of constraints of flows -- Constant over the entire simulation
 
-setwd(outputs_dir)
 A<-ComputeA(NDNDData)
-
-# 6. Initialization of the simulation -------------------------------------
 
 # Creates the elements in which the flows, new biomasses are saved
 
 BiomassSeries<-matrix(data = 0, nrow = NDNDData$Tmax, ncol = NDNDData$ns)               # Creates a matrix of dimension Tmax vs number of species full of 0. It is thought be filled with the biomass obtained during the calculations
 FlowSeries<-matrix(data = 0, nrow = NDNDData$Tmax, ncol = sum(NDNDData$PFv))            # Creates a matrix of dimension Tmax vs the number of possible flows. We kept only the links for which we had a 1 in PF. There are 18 links in our topology.
 BiomassSeries[1,]<-NDNDData$Biomass                                                     # We give that the biomass for t = 1 is the initial biomass
-#sim_b<-NULL #to be removed?
-#sim_pb<-NULL #to be removed?
 
 ## Not implemented yet, needs to be done for further investigation
 # T=1                                                                                     # Set initial time to 1 
 # Tcrash=0                                                                                # Set Tcrash to 0
 
-# 9. Main loop -----------------------------------------------------------------
+# 5. Main loop -----------------------------------------------------------------
 
 # The model run over Tmax years
 
@@ -117,7 +77,7 @@ for (t in 1:(NDNDData$Tmax-1)) {
   # Compute b
   
   #b<-Computeb(BiomassSeries[t,],Import,Export,NDNDData$Rho,NDNDData$Sigma,NDNDData$Beta,NDNDData$Mu,NDNDData$nn)
-  b<-Computeb(BiomassSeries[t,],Import,Export,NDNDData$Rho,NDNDData$Sigma,NDNDData$Beta,NDNDData$Mu,NDNDData$nn)
+  b<-Computeb(BiomassSeries[t,],Import,Export,NDNDData$Rho,NDNDData$Sgma,NDNDData$Bta,NDNDData$Mu,NDNDData$nn)
   #sim_b<-cbind(sim_b,b)#to be removed?
   
   # Delete irrelevant constraints using possibleAb
@@ -162,6 +122,7 @@ for (t in 1:(NDNDData$Tmax-1)) {
 }
 
 
+# 6. save simulation outputs  -------------------------------------------
 # 10. Plots ---------------------------------------------------------------
 
 Fig<-plot.NDND(BiomassSeries,NDNDData$Tmax,NDNDData$Species,NDNDData$ns,NDNDData$Plotting)
