@@ -24,14 +24,14 @@ ComputeBiomass<-function(NDNDData,CurrentBiomass,Fluxes,t){
   Export=NDNDData$Exportall[t,]
   Gama=NDNDData$Gama
   Mu=NDNDData$Mu
-  Fu=NDNDData$Fu
+  Phi=NDNDData$Phi
   Kapa=NDNDData$Kapa
   ns=NDNDData$ns
   
   # As in Computeb, Computation of constants C and D
   
-  C=as.matrix((1-exp(-(Mu+Fu)))/(Mu+Fu))                          # Computes C
-  D=as.matrix(exp(-(Mu+Fu)))                                 # Computes D
+  C=as.matrix((1-exp(-(Mu+Phi)))/(Mu+Phi))                          # Computes C
+  D=as.matrix(exp(-(Mu+Phi)))                                 # Computes D
   
   # The sampling of flows is going to be done for a vector of length ns^2
   # To apply compute the new biomasses -- Need elements of length ns

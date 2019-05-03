@@ -24,13 +24,13 @@ plot.NDND<-function(NDNDSimulation){
     facet_wrap(~factor(Flow,levels = NDNDSimulation$Data$flows),ncol=5,scale="free")+
     xlab("Years")
   
-  df_fu<-gather(NDNDSimulation$Output$FuSeries,key = "Species" , value = "Fu")
-  gg2_fu<-ggplot(df_fu,aes(x=rep(1:(NDNDSimulation$Data$Tmax-1),times=NDNDSimulation$Data$ns),y=Fu))+
+  df_phi<-gather(NDNDSimulation$Output$PhiSeries,key = "Species" , value = "Phi")
+  gg2_phi<-ggplot(df_phi,aes(x=rep(1:(NDNDSimulation$Data$Tmax-1),times=NDNDSimulation$Data$ns),y=Phi))+
     geom_line()+
     facet_wrap(~factor(Species,levels = NDNDSimulation$Data$Species),ncol=3)+
     xlab("Years")
 
- gg<-list(gg2_b,gg2_flow,gg2_fu)
+ gg<-list(gg2_b,gg2_flow,gg2_phi)
  return(gg)
 }
 

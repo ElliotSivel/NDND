@@ -22,14 +22,14 @@ Computeb<-function(NDNDData,Biomass,t){
   Sgma=NDNDData$Sgma
   Bta=NDNDData$Bta
   Mu=NDNDData$Mu
-  Fu=NDNDData$Fu
+  Phi=NDNDData$Phi
   nn=NDNDData$nn
   
   # Compute the C and D vectors : Simplification of elements of the master equation
   
-  C=as.matrix((1-exp(-(Mu+Fu)))/(Mu+Fu))                              # Computes C
+  C=as.matrix((1-exp(-(Mu+Phi)))/(Mu+Phi))                              # Computes C
   
-  D=as.matrix(exp(-(Mu+Fu)))                                     # Computes D
+  D=as.matrix(exp(-(Mu+Phi)))                                     # Computes D
   
   # Implementing constraints on biomasses
   # There are 5 constraints -- b1,b2,b3,b4,b5

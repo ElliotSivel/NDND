@@ -30,7 +30,7 @@ A<-ComputeA(NDNDData)
 BiomassSeries<-matrix(data = 0, nrow = NDNDData$Tmax, ncol = NDNDData$ns)               # Creates a matrix of dimension Tmax vs number of species full of 0. It is thought be filled with the biomass obtained during the calculations
 BiomassSeries[1,]<-NDNDData$Biomass                                                     # We give that the biomass for t = 1 is the initial biomass
 FlowSeries<-matrix(data = 0, nrow = (NDNDData$Tmax-1), ncol = sum(NDNDData$PFv))            # Creates a matrix of dimension Tmax vs the number of possible flows. We kept only the links for which we had a 1 in PF. There are 18 links in our topology.
-FuSeries<-matrix(data = 0, nrow = (NDNDData$Tmax-1), ncol = sum(NDNDData$ns))                                   # Series of fishing mortalities
+PhiSeries<-matrix(data = 0, nrow = (NDNDData$Tmax-1), ncol = sum(NDNDData$ns))                                   # Series of fishing mortalities
 
 ## Not implemented yet, needs to be done for further investigation
 # T=1                                                                                     # Set initial time to 1 
@@ -43,7 +43,7 @@ FuSeries<-matrix(data = 0, nrow = (NDNDData$Tmax-1), ncol = sum(NDNDData$ns))   
 for (t in 1:(NDNDData$Tmax-1)) {
   print(t)                                        # We want to be able to see the state of the simulation
   
-  NDNDData$Fu=ComputeFu(NDNDData,BiomassSeries[t,]) # Compute fishing mortality
+  NDNDData$Phi=ComputePhi(NDNDData,BiomassSeries[t,]) # Compute fishing mortality
   
   b<-Computeb(NDNDData,BiomassSeries[t,],t)   # Compute b
   
@@ -65,7 +65,8 @@ for (t in 1:(NDNDData$Tmax-1)) {
   # if(inherits(TRY, "try-error")==FALSE){
   # } else {
   # }  
-  Fsample<-xsample(G=G,H=h,iter=100,burninlength=100,outputlength=100,type="mirror")
+  #Fsample<-xsample(G=G,H=h,iter=100,burninlength=100,outputlength=100,type="mirror")
+  Fsample<-cpgs(1,-G,-h)
 
   #####
   
@@ -83,7 +84,7 @@ for (t in 1:(NDNDData$Tmax-1)) {
   # Compute biomass at the next time step
   
   BiomassSeries[t+1,]=ComputeBiomass(NDNDData,BiomassSeries[t,],Fluxes,t)
-  FuSeries[t,]=NDNDData$Fu  # store fishing mortalities
+  PhiSeries[t,]=NDNDData$Phi  # store fishing mortalities
   FlowSeries[t,]<-F0 # store trophic fluxes
   
 }
@@ -92,16 +93,16 @@ colnames(BiomassSeries)<-NDNDData$Species
 rownames(BiomassSeries)<-1:NDNDData$Tmax
 colnames(FlowSeries)<-NDNDData$flows
 rownames(FlowSeries)<-1:(NDNDData$Tmax-1)
-colnames(FuSeries)<-NDNDData$Species
-rownames(FuSeries)<-1:(NDNDData$Tmax-1)
+colnames(PhiSeries)<-NDNDData$Species
+rownames(PhiSeries)<-1:(NDNDData$Tmax-1)
 
 BiomassSeries<-as.data.frame(BiomassSeries)
 FlowSeries<-as.data.frame(FlowSeries)
-FuSeries<-as.data.frame(FuSeries)
+PhiSeries<-as.data.frame(PhiSeries)
 
 # 3. return simulation outputs  -------------------------------------------
 
-NDNDOutput=list(BiomassSeries=BiomassSeries,FlowSeries=FlowSeries,FuSeries = FuSeries)
+NDNDOutput=list(BiomassSeries=BiomassSeries,FlowSeries=FlowSeries,PhiSeries = PhiSeries)
 NDNDCode=NULL
 maincodefile=paste(NDNDData$directories$code_dir,'/NDND_main.r',sep='')
 if (file.exists(maincodefile)==TRUE){
