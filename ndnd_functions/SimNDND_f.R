@@ -66,7 +66,7 @@ for (t in 1:(NDNDData$Tmax-1)) {
   # } else {
   # }  
   #Fsample<-xsample(G=G,H=h,iter=100,burninlength=100,outputlength=100,type="mirror")
-  Fsample<-cpgs(1,-G,-h)
+  Fsample<-cpgs(100,-G,-h)
 
   #####
   
@@ -74,7 +74,9 @@ for (t in 1:(NDNDData$Tmax-1)) {
   # First is sampled flows
   # We defined a number of iterations (100) -- We only need one vector
   
-  F0<-Fsample[[1]][sample(1:nrow(Fsample[[1]]),1),]                   # Sample one random vector of flows among 100 sampled with the xsample function
+  #F0<-Fsample[[1]][sample(1:nrow(Fsample[[1]]),1),]                   # Sample one random vector of flows among 100 sampled with the xsample function
+  F0<-Fsample[sample(1:nrow(Fsample),1),]                   # Sample one random vector of flows among 100 sampled with the xsample function
+  
   
   # Reattributing the flows values
   
