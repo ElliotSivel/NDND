@@ -13,6 +13,7 @@ SimNDND <- function(NDNDData){
   Simulation.tag=Sys.time()
   
   # 1. Initialization of the simulation -------------------------------------
+# <<<<<<< HEAD
 
 # NDND model is based on a random sampling of flows in a restricted range of possibilities
 # Range of possibilites restricted by constraints expressed as inequalities
@@ -91,19 +92,18 @@ NDNDCode=NULL
 maincodefile=paste(NDNDData$directories$code_dir,'/NDND_main.r',sep='')
 if (file.exists(maincodefile)==TRUE){
   NDNDCode$main <- scan(maincodefile,what="",sep="\n")
-  }  # reads the current file and store it into the variable 'code'
-for (i in 1:length(NDNDfunctions)){
-  function2scan<-paste(NDNDData$directories$functions_dir,"/",NDNDfunctions[i],sep="")
-  NDNDCode$functions[[i]]=scan(function2scan,what="",sep="\n")
+  for (i in 1:length(NDNDfunctions)){
+    function2scan<-paste(NDNDData$directories$functions_dir,"/",NDNDfunctions[i],sep="")
+    NDNDCode$functions[[i]]=scan(function2scan,what="",sep="\n")
+  }
+  NDNDSimulation=list(Simulation.tag=Simulation.tag,
+                      Data=NDNDData,
+                      Output=NDNDOutput,
+                      Code=NDNDCode)
+  
+  return(NDNDSimulation)
 }
-NDNDSimulation=list(Simulation.tag=Simulation.tag,
-                    Data=NDNDData,
-                    Output=NDNDOutput,
-                    Code=NDNDCode)
-
-return(NDNDSimulation)
 }
-
 
 # 
 #   ##### POSSIBLE FUNCTION

@@ -19,7 +19,7 @@ chebycenter <- function(A,b){
 cpgs <- function(N,A,b,x0={}){
   p <- dim(A)[2]                         # dimension
   m <- dim(A)[1]                         # num constraint ineqs
-  runup <- 100;                          # runup necessary to method
+  runup <- 50;                          # runup necessary to method
   discard <- runup;
   if (isempty(x0)==TRUE){
     x0 = chebycenter(A,b);              # Chebyshev center of the polytope
