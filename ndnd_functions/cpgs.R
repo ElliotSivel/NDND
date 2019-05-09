@@ -1,3 +1,4 @@
+# Author : Benjamin Planque
 # convex polytope gibbs sampler
 # require(pracma)                          # practical numerical math functions
 # require(linprog)
