@@ -1,3 +1,5 @@
+## Author : Hilaire Drouineau and Benjamin Planque
+
 library(RcppEigen)
 library(Rcpp)
 library(inline)
