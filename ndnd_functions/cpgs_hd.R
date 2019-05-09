@@ -1,17 +1,31 @@
-library(RcppEigen)
-library(Rcpp)
-library(inline)
+# library(RcppEigen)
+# library(Rcpp)
+# library(inline)
 
-  
+Sys.setenv(PATH = 
+             "C:/Users/a22073/Documents/Rtools/bin/;
+              C:/Users/a2207/Documents/R-3.6.0/bin/x64;
+              C:/Program Files (x86)/Common Files/Oracle/Java/javapath;
+              C:/WINDOWS/system32;
+              C:/WINDOWS;
+              C:/WINDOWS/System32/Wbem;
+              C:/WINDOWS/System32/WindowsPowerShell/v1.0/;
+              C:/Program Files/Intel/WiFi/bin/;
+              C:/Program Files/Common Files/Intel/WirelessCommon/;
+              C:/Program Files/Git/cmd;
+              C:/Users/Administrator/AppData/Local/Microsoft/WindowsApps;
+              C:/Users/Administrator/AppData/Local/Box/Box Edit/")
+
 #creation de la fonction CPP    
 cpgsCPP='#include <Eigen/Cholesky>
+
 using Eigen::Map;
 using Eigen::MatrixXd;
 using Eigen::VectorXd;
 
-const Map<MatrixXd>A(as<Map<MatrixXd>>(AA));
-const Map<VectorXd>b(as<Map<VectorXd>>(bb));
-const Map<VectorXd>x0(as<Map<VectorXd>>(xx0));
+const Map<MatrixXd>A(as<Map<MatrixXd> >(AA));
+const Map<VectorXd>b(as<Map<VectorXd> >(bb));
+const Map<VectorXd>x0(as<Map<VectorXd> >(xx0));
 
 int N=Rcpp::as<int>(NN); 
 int p=A.cols();
@@ -104,23 +118,37 @@ return wrap(X.bottomRows(N));'
 #compilation (à ne faire qu'une seule fois)
 cpgs2<-cxxfunction(signature(NN="integer",AA="matrix",bb="vector",xx0="vector"),cpgsCPP,plugin="RcppEigen")
   
-#jeu de test
-A=matrix(c(1,0,0,1,-1,0,0,-1,1,1),ncol=2,byrow=TRUE)
-b=c(50,50,0,0,75)
-x0=c(25,10)
-  
-#test de la fonction 
-debut=Sys.time()
-res=cpgs2(150000,A,b,x0)
-end=Sys.time()
-duree=end-debut
-print(duree)
-  
-#test de l'ancienne fonction
-debut=Sys.time()
-res=cpgs(150000,A,b,x0)
-end=Sys.time()
-duree=end-debut
-print(duree)
-  
-  
+# #jeu de test
+# A=matrix(c(1,0,0,1,-1,0,0,-1,1,1),ncol=2,byrow=TRUE)
+# b=c(50,50,0,0,75)
+# x0=c(25,10)
+#   
+# #test de la fonction 
+# debut=Sys.time()
+# res=cpgs2(150000,A,b,x0)
+# end=Sys.time()
+# duree=end-debut
+# print(duree)
+#   
+# #test de l'ancienne fonction
+# debut=Sys.time()
+# res=cpgs(150000,A,b,x0)
+# end=Sys.time()
+# duree=end-debut
+# print(duree)
+# 
+# Sys.getenv()
+# Sys.setenv(PATH = 
+#            "C:/Users/a22073/Documents/Rtools/bin/;
+#            C:/Users/a2207/Documents/R-3.6.0/bin/x64;
+#            C:/Program Files (x86)/Common Files/Oracle/Java/javapath;
+#            C:/WINDOWS/system32;
+#            C:/WINDOWS;
+#            C:/WINDOWS/System32/Wbem;
+#            C:/WINDOWS/System32/WindowsPowerShell/v1.0/;
+#            C:/Program Files/Intel/WiFi/bin/;
+#            C:/Program Files/Common Files/Intel/WirelessCommon/;
+#            C:/Program Files/Git/cmd;
+#            C:/Users/Administrator/AppData/Local/Microsoft/WindowsApps;
+#            C:/Users/Administrator/AppData/Local/Box/Box Edit/")
+# Sys.setenv(BINPREF = "C:/Rtools/mingw_$(WIN)/bin/") 

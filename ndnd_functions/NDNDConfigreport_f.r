@@ -39,6 +39,8 @@ NDNDConfigreport<-function(directory=".",NDNDData){
     }
   cat("Number of Species : ",NDNDData$ns,"\n")                                    # Prints out the number of species
   cat("Length of the simulation : ", NDNDData$Tmax," years","\n")                 # Prints out the length of the simulation
+  cat("Sample algorithm : ", NDNDData$Sampling_algorithm, "\n")                   # Prints out the chosen sampling algorithm
+  cat("Plotting parameter :", NDNDData$Plotting,"\n")                             # Prints out if the time series are going to be plotted
   cat("------------------------------","\n")
   
   # Prints out the species names implemented in the model
@@ -101,7 +103,7 @@ NDNDConfigreport<-function(directory=".",NDNDData){
   
   cat("Satiation :","\n")
   cat("","\n")
-  print(NDNDData$Sigma)
+  print(NDNDData$Sgma)
   cat("------------------------------","\n")                                      # Prints out the vector of Sigma parameter values 
   
   # We estimate and print out the food requirements with stable biomass for 2 years
@@ -141,7 +143,7 @@ NDNDConfigreport<-function(directory=".",NDNDData){
   
   cat("Refuge Biomass (Beta) : ","\n")
   cat("","\n")
-  print(NDNDData$Beta)                                                            # Prints out the vector of refuge biomass for all species
+  print(NDNDData$Bta)                                                            # Prints out the vector of refuge biomass for all species
   cat("------------------------------","\n")
   
   # Prints out the Import values

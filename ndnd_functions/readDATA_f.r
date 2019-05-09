@@ -16,10 +16,10 @@ readDATA<-function(directories,config_file,Data.tag){
   setwd(directories$files_dir)
   # Test the presence of the data files needed in the work directory
   
-  exist.file<-vector(length=length(file.names)-2)                   # Create an empty vector of length of number of files
+  exist.file<-vector(length=length(file.names)-3)                   # Create an empty vector of length of number of files
                                                                     # "-2" because the two last elements of the NDNDConfig file are the length of simulation and the plotting parameter
                                                                     # We don't need them now
-  for (i in (1:(length(file.names)-2))) {                           # Loop on file.names to test if each file is existing in the work directory                
+  for (i in (1:(length(file.names)-3))) {                           # Loop on file.names to test if each file is existing in the work directory                
     exist.file[i]<-file.exists(file.names[i])                       # Output a vector of bolean values (FALSE : the file is missing ; TRUE : the file is there)
   }
   
@@ -27,7 +27,7 @@ readDATA<-function(directories,config_file,Data.tag){
   # We want the files to be loaded if all files are available
   # We want the function to return an error message if at least one of the files is missing
   
-  if (sum(exist.file)==length(file.names)-2){                                                               # Condition for the model to run : the sum of exist.file = length of file.names
+  if (sum(exist.file)==length(file.names)-3){                                                               # Condition for the model to run : the sum of exist.file = length of file.names
                                                                                                             # If the condition is verified :
     Species<-scan(file=file.names[1],what=character(),quote="")                                             # Read species.txt
     PF<-read.table(file.names[2], header=F, sep="\t",stringsAsFactors = F)                                  # Read fluxes.txt
@@ -115,7 +115,11 @@ readDATA<-function(directories,config_file,Data.tag){
   
   # Defining if the time series are going to be plotted
   
-  Plotting<- file.names[8]                   # Binary parameter (0 = no plot ; 1 = plot)               
+  Plotting<- file.names[8]                   # Binary parameter (0 = no plot ; 1 = plot) 
+  
+  # Defining the sampling algorithm
+  
+  ech<-file.names[9]
   
   # Merging all created elements na list
   
@@ -141,7 +145,8 @@ readDATA<-function(directories,config_file,Data.tag){
                  PFv = PFv,
                  flows = flows,
                  Plotting = Plotting,
-                 directories = directories)
+                 directories = directories,
+                 Sampling_algorithm = ech)
   
   # Give the elements the function should return
   return(NDNDData)

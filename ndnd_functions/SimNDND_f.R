@@ -51,40 +51,25 @@ for (t in 1:(NDNDData$Tmax-1)) {
   
   Abp<-possibleAb(A,b,NDNDData$PFv)
   pA<-Abp[[1]];pb<-Abp[[2]]               # Defines two matrices with the existing constraint on flows and biomasses
-
-  ##### POSSIBLE FUNCTION
-  # The LIM defines three possible constraints
-  # For inequalities, the package formulates it Gx >= H
-  # Transformation for sampling
   
-  G<-as.matrix(-pA)                       # Defining A (constraints on fluxes) for the sampling
-  h<-as.matrix(-pb)                       # Defining b (constraints on biomasses) for th sampling
-  
-  # Sampling Fluxes -- Sampling algorithm : mirror
-  # TRY=try()
-  # if(inherits(TRY, "try-error")==FALSE){
-  # } else {
-  # }  
-  Fsample<-xsample(G=G,H=h,iter=100,burninlength=100,outputlength=100,type="mirror")
-
-  #####
-  
-  # Fsample = list of four elements
-  # First is sampled flows
-  # We defined a number of iterations (100) -- We only need one vector
-  
-  F0<-Fsample[[1]][sample(1:nrow(Fsample[[1]]),1),]                   # Sample one random vector of flows among 100 sampled with the xsample function
+  TRY=try(Fsample<-Sampling(pA,pb,"cpgs2"))
+  if(inherits(TRY, "try-error")==FALSE){
+    Fsample<-Sampling(pA,pb,"cpgs2")
+  } else {
+    print("No polytope solution")
+    break
+  }
   
   # Reattributing the flows values
   
   Fluxes<-rep(0,NDNDData$nn)                                               # Creating a vector of 0 and of length nn
-  Fluxes[NDNDData$PFv==1]<-F0                                              # Attribute the flow values at the right place according to the vector PFv
+  Fluxes[NDNDData$PFv==1]<-Fsample                                              # Attribute the flow values at the right place according to the vector PFv
   
   # Compute biomass at the next time step
   
   BiomassSeries[t+1,]=ComputeBiomass(NDNDData,BiomassSeries[t,],Fluxes,t)
   PhiSeries[t,]=NDNDData$Phi  # store fishing mortalities
-  FlowSeries[t,]<-F0 # store trophic fluxes
+  FlowSeries[t,]<-Fsample # store trophic fluxes
   
 }
 
@@ -119,3 +104,29 @@ NDNDSimulation=list(Simulation.tag=Simulation.tag,
 return(NDNDSimulation)
 }
 
+
+# 
+#   ##### POSSIBLE FUNCTION
+#   # The LIM defines three possible constraints
+#   # For inequalities, the package formulates it Gx >= H
+#   # Transformation for sampling
+#   
+#   G<-as.matrix(-pA)                       # Defining A (constraints on fluxes) for the sampling
+#   h<-as.matrix(-pb)                       # Defining b (constraints on biomasses) for th sampling
+#   
+#   # Sampling Fluxes -- Sampling algorithm : mirror
+#   # TRY=try()
+#   # if(inherits(TRY, "try-error")==FALSE){
+#   # } else {
+#   # }  
+#   Fsample<-xsample(G=G,H=h,iter=100,burninlength=100,outputlength=100,type="mirror")
+#   # Fsample<-cpgs(100,-G,-h)
+# 
+#   #####
+#   
+# Fsample = list of four elements
+# First is sampled flows
+# We defined a number of iterations (100) -- We only need one vector
+
+# F0<-Fsample[[1]][sample(1:nrow(Fsample[[1]]),1),]                   # Sample one random vector of flows among 100 sampled with the xsample function
+# F0<-Fsample[sample(1:nrow(Fsample),1),]                   # Sample one random vector of flows among 100 sampled with the xsample function

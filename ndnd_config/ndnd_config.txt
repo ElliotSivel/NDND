@@ -1,7 +1,15 @@
 species.txt
+
 fluxes.txt
+
 coefs.txt
+
+coefs_MP.txt
 import.txt
+
 export.txt
+
 1000
+
 1
+cpgs2
