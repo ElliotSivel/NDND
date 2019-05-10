@@ -29,6 +29,10 @@ library(inline)
 library(devtools)
 library(memisc)
 
+# Set the environement of the system
+
+Sys.setenv(PATH = "C:/Users/a22073/Documents/Rtools/;C:/Users/a2207/Documents/R-3.6.0/bin/x64;C:/Program Files(x86)/Common Files/Oracle/Java/javapath;C:/WINDOWS/system32;C:/WINDOWS; C:/WINDOWS/System32/Wbem;C:/WINDOWS/System32/WindowsPowerShell/v1.0/;C:/Program Files/Intel/WiFi/bin/;C:/Program Files/Common Files/Intel/WirelessCommon/;C:/Program Files/Git/cmd;C:/Users/Administrator/AppData/Local/Microsoft/WindowsApps;C:/Users/Administrator/AppData/Local/Box/Box Edit/;")
+
 # 2. Load functions -------------------------------------------------------
 
 setwd(selectDirectory(caption = "Select your work directory : "))
