@@ -3,7 +3,7 @@
 #### readDATA function
 #### Version v1.0
 #### 27.03.19
-#### Author : Elliot Sivel
+#### Author : Elliot Sivel, Benjamin Planque and Ulf Lindstrøm
 ###############################################################################################
 
 ##### readData function
@@ -147,6 +147,9 @@ readDATA<-function(directories,config_file,Data.tag){
                  Plotting = Plotting,
                  directories = directories,
                  Sampling_algorithm = ech)
+  
+  # Set the work directory back to the initial work directory
+  setwd(wd)
   
   # Give the elements the function should return
   return(NDNDData)

@@ -97,19 +97,3 @@ ComputeA<-function(NDNDData){
   
   return(A)
 }
-
-
-# # Set identification flag
-# 
-# ID<-NULL
-# ID[1]<-as.character(NDNDData$Sys.time)                           # Print Date and Time
-# ID[2]<-R.Version()$version.string                         # Print R version
-# ID[3]<-Sys.info()[1]                                      # Print the Computer software version (Windows, Mac or Linux)
-# ID[4]<-Sys.info()[2]
-# ID[5]<-Sys.info()[3]
-# ID[6]<-Sys.info()[5]
-# 
-# ComputeA_Data<-list(ID,ns,nn,Gama,Kapa,SumFij,SumFji,Kapa2,SumKjFji,A1,A2,A3,A4,A5,A)
-# names(ComputeA_Data)<-c("ID","ns","nn","Gama","Kapa","SumFij","SumFji","Kapa2","SumKjFji","A1","A2","A3","A4","A5","A")
-# save(ComputeA_Data,file=paste("ComputerA_Data_",date_time_name,".RData"))
-

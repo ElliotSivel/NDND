@@ -20,6 +20,8 @@
 
 #ComputeBiomass<-function(Biomass,F,Import,Export,Gama,Mu,Kapa,ns){
 ComputeBiomass<-function(NDNDData,CurrentBiomass,Fluxes,t){
+  
+  # Load parameters
   Import=NDNDData$Importall[t,]
   Export=NDNDData$Exportall[t,]
   Gama=NDNDData$Gama
@@ -29,7 +31,6 @@ ComputeBiomass<-function(NDNDData,CurrentBiomass,Fluxes,t){
   ns=NDNDData$ns
   
   # As in Computeb, Computation of constants C and D
-  
   C=as.matrix((1-exp(-(Mu+Phi)))/(Mu+Phi))                          # Computes C
   D=as.matrix(exp(-(Mu+Phi)))                                 # Computes D
   

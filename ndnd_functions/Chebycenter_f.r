@@ -3,7 +3,7 @@
 #### Chebycenter function
 #### Version v1.0
 #### 09.05.19
-#### Author : Elliot Sivel
+#### Author : Benjamin Planque, Hilaire Drouineau
 ###############################################################################################
 
 chebycenter <- function(A,b){
@@ -18,6 +18,7 @@ chebycenter <- function(A,b){
   
   #d <- linprog(cc=f,A=A1,b=b);
   #x <- d$x[1:p];
+  
   d <- lp(direction="min",objective.in = f,const.mat = A1,const.rhs = as.numeric(b),const.dir = rep("<=",n))
   x <- d$solution
   return(x[-p])

@@ -7,7 +7,6 @@
 #### License ???
 ###############################################################################################
 
-
 # 0. Warning --------------------------------------------------------------
 
 # The code needs to run parts in C++ to increase the speed of simulation
@@ -61,7 +60,7 @@ for (i in 1:length(NDNDfunctions)){
 
 dir_tab<-directories(wd=wd)                    # Save all directories available from the initial directory in a vector
 
-# 4. prepare data file ---------------------------------------------------
+# 4. Load data ---------------------------------------------------
 
 # The Data file is not varying from unless the initial data has been changed
 # If a NDNDData file has already been saved for a precise configuration you don't need to rerun the entire dataprep
