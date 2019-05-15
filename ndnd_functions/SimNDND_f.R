@@ -13,7 +13,6 @@ SimNDND <- function(NDNDData){
   Simulation.tag=Sys.time()
   
   # 1. Initialization of the simulation -------------------------------------
-# <<<<<<< HEAD
 
 # NDND model is based on a random sampling of flows in a restricted range of possibilities
 # Range of possibilites restricted by constraints expressed as inequalities

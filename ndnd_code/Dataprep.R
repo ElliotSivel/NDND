@@ -26,7 +26,7 @@ NDNDData<-readDATA(directories = dir_tab,config_file = config_file,Data.tag = Da
 save(NDNDData,file=paste(dir_tab$data_dir,"/NDNDData_",
                          paste(format(Data.tag,"%Y_%m_%d_%H_%M_%S"),sep = ""),
                          ".RData",sep=""))             # Save NDNDData with time stamp
-save(NDNDData,file="NDNDData.RData")                   # Save NDNDData without time stamp
+save(NDNDData,file=paste(dir_tab$data_dir,"/NDNDData.RData",sep="")                   # Save NDNDData without time stamp
 
 # 4. Report Model Configuration --------------------------------------------
 
