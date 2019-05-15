@@ -18,7 +18,7 @@
 
 #####
 # Needs to be generalized
-Sys.setenv(PATH = "C:/Users/a22073/Documents/Rtools/bin/;C:/Users/a2207/Documents/R-3.6.0/bin/x64;C:/Program Files(x86)/Common Files/Oracle/Java/javapath;C:/WINDOWS/system32;C:/WINDOWS; C:/WINDOWS/System32/Wbem;C:/WINDOWS/System32/WindowsPowerShell/v1.0/;C:/Program Files/Intel/WiFi/bin/;C:/Program Files/Common Files/Intel/WirelessCommon/;C:/Program Files/Git/cmd;C:/Users/Administrator/AppData/Local/Microsoft/WindowsApps;C:/Users/Administrator/AppData/Local/Box/Box Edit/;")
+Sys.setenv(PATH = "C:\\Users\\a22073\\Documents\\Rtools\\bin;C:\\Users\\a2207\\Documents\\R-3.6.0\\bin\\x64;C:\\Program Files(x86)\\Common Files\\Oracle\\Java\\javapath;C:\\WINDOWS\\system32;C:\\WINDOWS; C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\Program Files\\Intel\\WiFi\\bin\\;C:\\Program Files\\Common Files\\Intel\\WirelessCommon\\;C:\\Program Files\\Git\\cmd;C:\\Users\\Administrator\\AppData\\Local\\Microsoft\\WindowsApps;C:\\Users\\Administrator\\AppData\\Local\\Box\\Box Edit\\;")
 
 # 1. Initialization ----------------------------------------------------------
 
@@ -30,19 +30,19 @@ rm(list=ls())                               # clear the work environment
 
 # Load specific libraries
 
-library(rstudioapi)                         # Loading the rstudioapi package -- Directory and file interactive choice
-library(LIM)                                # Loading the LIM package -- The LIM library is used for the sampling of flows -- Soetaert and van Oevelen (2014)
-library(ggplot2)                            # Loading the ggplot package -- Graphics package 
-library(tidyverse)                          # Loading the tidyverse package -- Set of packages for data manipulations
-library(pracma)                             # Loading the pracma package -- Mathematical tools and functions
-library(linprog)                            # Loading the linprog package -- Linear programming and optimization
-library(RcppEigen)                          # Loading the RcppEigen package -- Linear algebra on C++ integrated in R
-library(Rcpp)                               # Loading the Rcpp package -- Integration of R and C++
-library(inline)                             # Loading the inline package -- Read C++ functions called in R
+library(abind)                              # Loading the abind package -- Bindind arrays
 library(devtools)                           # Loading the devtools package -- Tools for package development
+library(ggplot2)                            # Loading the ggplot package -- Graphics package
+library(inline)                             # Loading the inline package -- Read C++ functions called in R
+library(LIM)                                # Loading the LIM package -- The LIM library is used for the sampling of flows -- Soetaert and van Oevelen (2014)
+library(linprog)                            # Loading the linprog package -- Linear programming and optimization
 library(memisc)                             # Loading the memisc package -- 
 library(plyr)                               # Loading the plyr package -- Dataframe manipulation
-library(abind)                              # Loading the abind package -- Bindind arrays 
+library(pracma)                             # Loading the pracma package -- Mathematical tools and functions
+library(Rcpp)                               # Loading the Rcpp package -- Integration of R and C++
+library(RcppEigen)                          # Loading the RcppEigen package -- Linear algebra on C++ integrated in R
+library(rstudioapi)                         # Loading the rstudioapi package -- Directory and file interactive choice
+library(tidyverse)                          # Loading the tidyverse package -- Set of packages for data manipulations
 
 # 2. Load functions -------------------------------------------------------
 
