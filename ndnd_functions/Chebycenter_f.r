@@ -21,5 +21,5 @@ chebycenter <- function(A,b){
   
   d <- lp(direction="min",objective.in = f,const.mat = A1,const.rhs = as.numeric(b),const.dir = rep("<=",n))
   x <- d$solution
-  return(x[-p])
+  return(x[-p-1])
 }

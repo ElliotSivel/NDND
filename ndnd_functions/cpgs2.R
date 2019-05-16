@@ -16,7 +16,7 @@
 
 #creation de la fonction CPP    
 cpgsCPP='#include <Eigen/Cholesky>
-
+#include <Rcpp.h>
 using namespace Rcpp;
 using Eigen::Map;
 using Eigen::MatrixXd;

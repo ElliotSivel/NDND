@@ -103,4 +103,3 @@ save(NDNDSimulation,file=paste(NDNDData$directories$outputs_dir,"/NDNDSim_",form
 
 Fig<-plot.NDND(NDNDSimulation = NDNDSimulation)
 Fig[[2]]
-
