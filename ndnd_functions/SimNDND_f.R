@@ -43,7 +43,7 @@ SimNDND <- function(NDNDData){
 
   # The model run over Tmax years
   for (t in 1:(NDNDData$Tmax-1)) {
-    # print(t)                                        # We want to be able to see the state of the simulation
+    print(t)                                        # We want to be able to see the state of the simulation
   
     NDNDData$Phi=ComputePhi(NDNDData,BiomassSeries[t,]) # Compute fishing mortality
   
