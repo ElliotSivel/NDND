@@ -2,7 +2,7 @@
 #### The Non-Deterministic Network Model (NDND) Mullon et al., 2009 , Planque et al., 2014
 #### NDNDConfigreport function
 #### Version v1.0
-#### 27.03.19
+#### 24.06.19
 #### Author : Elliot Sivel
 ###############################################################################################
 

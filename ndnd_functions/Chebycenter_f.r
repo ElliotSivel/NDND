@@ -2,7 +2,7 @@
 #### The Non-Deterministic Network Model (NDND) Mullon et al., 2009 , Planque et al., 2014
 #### Chebycenter function
 #### Version v1.0
-#### 09.05.19
+#### 24.06.19
 #### Author : Benjamin Planque, Hilaire Drouineau
 ###############################################################################################
 

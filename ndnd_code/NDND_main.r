@@ -1,8 +1,8 @@
 ###############################################################################################
 #### The Non-Deterministic Network Model (NDND) Mullon et al., 2009 , Planque et al., 2014
 #### Model simulation
-#### Version v1.1.5
-#### 08.04.19
+#### Version v1.0
+#### 24.06.19
 #### Author : Elliot Sivel, Benjamin Planque and Ulf Lindstrøm
 #### License ???
 ###############################################################################################
