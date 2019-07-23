@@ -115,4 +115,9 @@ S.setIdentity();
 return wrap(X.bottomRows(N));'
 
 #compilation (à ne faire qu'une seule fois)
-cpgs2<-cxxfunction(signature(NN="integer",AA="matrix",bb="vector",xx0="vector"),cpgsCPP,plugin="RcppEigen",verbose=TRUE)
+settings=getPlugin("RcppEigen")
+settings$env$PKG_CXXFLAGS <- paste('-O3 -fopenmp', settings$env$PKG_CXXFLAGS)
+settings$env$PKG_LIBS <- paste('-fopenmp -lgomp', settings$env$PKG_LIBS)
+
+cpgs2<-cxxfunction(signature(NN="integer",AA="matrix",bb="vector",xx0="vector"),cpgsCPP,plugin="RcppEigen",verbose=TRUE,
+                   settings=settings)
