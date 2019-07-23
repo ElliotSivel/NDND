@@ -1,0 +1,10 @@
+NDND.nb.sim<-function(Data,s_length,Biomass,Flows,Phi){
+  Biomass[,9]<-rep(1:s_length,byrow=F,each=Data$Tmax)
+  Flows[,19]<-rep(1:s_length,byrow=F,each=Data$Tmax-1)
+  Phi[,9]<-rep(1:s_length,byrow=F,each=Data$Tmax-1)
+  colnames(Biomass)<-c(Data$Species,"Simulation")
+  colnames(Flows)<-c(Data$flows,"Simulation")
+  colnames(Phi)<-c(Data$Species,"Simulation")
+  sim_out<-list(Biomass=Biomass,Flows=Flows,Phi=Phi)
+  return(sim_out)
+}
