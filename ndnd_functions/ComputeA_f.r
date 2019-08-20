@@ -32,13 +32,13 @@ ComputeA<-function(NDNDData){
   
   # Vector VI --> the possible flows towards predators for each species
   
-  VI<-as.matrix(rep(1:8,byrow=F,each=ns))       # Vector from 1 to ns
+  VI<-as.matrix(rep(1:ns,byrow=F,each=ns))       # Vector from 1 to ns
                                                 # Replication each value ns times
                                                 # Vector dimension 1:nn
   
   # Vector VJ --> The possible flows incoming for each species
   
-  VJ<-as.matrix(rep(1:8,times=ns))              # Vector from 1 to ns
+  VJ<-as.matrix(rep(1:ns,times=ns))              # Vector from 1 to ns
                                                 # Replication of the vector ns times
                                                 # Vector of dimension 1:nn
   
