@@ -43,7 +43,11 @@ rm(list=ls())                               # clear the work environment
 
 library(abind)                              # Loading the abind package -- Bindind arrays
 library(arrayhelpers)                       # Loading the arrayhelpers package -- Functions for array modification and shaping
+library(cluster)
+library(cpgsR)
+library(dendextend)
 library(devtools)                           # Loading the devtools package -- Tools for package development
+library(factoextra)
 library(ggdendro)                           # Loading the ggdendro package -- Package to plot dendrograms with ggplot
 library(ggplot2)                            # Loading the ggplot package -- Graphics package
 library(inline)                             # Loading the inline package -- Read C++ functions called in R
@@ -58,6 +62,7 @@ library(RcppEigen)                          # Loading the RcppEigen package -- L
 library(rgl)                                # Loading the rgl package -- 3d graphs
 library(rstudioapi)                         # Loading the rstudioapi package -- Directory and file interactive choice
 library(scales)                             # Loading the scales package -- Graphical attributes package
+library(svglite)
 library(tidyverse)                          # Loading the tidyverse package -- Set of packages for data manipulations
 
 # 2. Initialization -------------------------------------------------------

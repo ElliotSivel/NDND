@@ -49,14 +49,18 @@ NDND.auto.cor<-function(Out.file){
   AC_plot<-ggplot(AC_gg,aes(x=Years,y=Correlation,group=Species))+
     geom_line(aes(color=Species),size=0.1)+
     geom_line(y=0)+
-    geom_line(y=sig_AC,col="blue",linetype=2)+
-    geom_line(y=-sig_AC,col="blue",linetype=2)+
-    facet_wrap(.~factor(Species,levels = Sp),ncol=3)+
-    scale_x_discrete(breaks = seq(0,Tmax,Tmax/10))+
+    geom_line(y=sig_AC,col="blue",linetype=2,size=0.5)+
+    geom_line(y=-sig_AC,col="blue",linetype=2,size=0.5)+
+    facet_wrap(.~factor(Species,levels = Sp),ncol=3,scale="free_y")+
+    scale_x_continuous(name="Years",breaks=seq(0,Tmax,150))+
     scale_color_brewer(palette = "Paired")+
     theme_bw()+
-    theme(strip.background = element_rect(fill = "gray"))+
-    ggtitle("Temporal autocorrelation correlograms")
+    theme(strip.background = element_rect(fill = "gray"),
+          legend.position="none",
+          axis.title.x = element_text(margin = margin(t = 10)),
+          axis.title.y = element_text(margin = margin(r = 10)))
+    # ggtitle("Temporal autocorrelation correlograms")
+    
   
   # Defining for which lag the autocorrelation gets non-significant
   # Creating an array in which we will fill the first lag value for which the autocorrelation is not significant
@@ -82,7 +86,7 @@ NDND.auto.cor<-function(Out.file){
   NDND_auto_cor<-list(Sim.tag=Output$Sim.tag,                                     # Simulation tag for identifying the simulation
                       Autocorrelation = AC,                                       # The autocorrelation values array
                       Autocorrelation_significance_level = sig_AC,                # Value of significance of autocorrelation
-                                                                                  # It's a single value because the significance levels depends only on the number of statistical samples
+                      Burn_mat = SIG_val,                                         # It's a single value because the significance levels depends only on the number of statistical samples
                       Burn_In = Burn_In,                                          # Burn-In value 
                       Correlogram = AC_plot)                                      # ggplots correlograms
   

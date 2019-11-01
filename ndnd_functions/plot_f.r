@@ -12,9 +12,9 @@
 
 plot.NDND<-function(Out.file){
   
-  Biomass<-as.data.frame(Out.file$Output.BI$Biomass)
-  Flows<-as.data.frame(Out.file$Output.BI$Flows)
-  Phi<-as.data.frame(Out.file$Output.BI$Phi)
+  Biomass<-as.data.frame(Out.file$Output$Biomass)
+  Flows<-as.data.frame(Out.file$Output$Flows)
+  Phi<-as.data.frame(Out.file$Output$Phi)
   Sp<-Out.file$Data$Species
   Tmax<-Out.file$Data$Tmax
   BI<-Out.file$Burn.In
@@ -25,11 +25,16 @@ plot.NDND<-function(Out.file){
  
   gg_bio<-ggplot(bio_gg,aes(x=as.factor(Years),y=Biomass,group=Simulation))+
     geom_line(aes(color=Species))+
-    facet_wrap(.~factor(Species,levels = Out.file$Data$Species),ncol=3,scale="free")+
-    scale_x_discrete(breaks = seq(min(bio_gg$Years),max(bio_gg$Years),50))+
+    facet_wrap(.~factor(Species,levels = Sp),ncol=3,scale="free_y")+
+    scale_x_discrete(name="Years",breaks = seq(min(bio_gg$Years)-1,max(bio_gg$Years)-1,100))+
     scale_color_brewer(palette = "Paired")+
     theme_bw()+
-    theme(strip.background = element_rect(fill = "gray"))
+    theme(strip.background = element_rect(fill = "gray"),
+          legend.position = "none",
+          axis.title.x = element_text(margin = margin(t = 10)),
+          axis.title.y = element_text(margin = margin(r = 10)))
+
+    # ggtitle("Timeseries of biomass for the Barents Sea food web")
  
   Years<-rep(1:((Tmax-1)-BI),times=as.numeric(length(table(Biomass[,ncol(Biomass)]))))
   Flows<-cbind(Years,Flows)
@@ -41,7 +46,8 @@ plot.NDND<-function(Out.file){
     scale_x_discrete(breaks = seq(min(f_gg$Years),max(f_gg$Years),50))+
     # scale_color_brewer(palette = "Paired")+
     theme_bw()+
-    theme(strip.background = element_rect(fill = "gray"))
+    theme(strip.background = element_rect(fill = "gray"))+
+    ggtitle("Timeseries of flows for the Barents Sea food web")
  
   Years<-rep(1:((Tmax-1)-BI),times=as.numeric(length(table(Biomass[,ncol(Biomass)]))))
   Phi<-cbind(Years,Phi)
@@ -54,7 +60,8 @@ plot.NDND<-function(Out.file){
     scale_x_discrete(breaks = seq(min(Phi_gg$Years),max(Phi_gg$Years),50))+
     # scale_color_brewer(palette = "Paired")+
     theme_bw()+
-    theme(strip.background = element_rect(fill = "gray"))
+    theme(strip.background = element_rect(fill = "gray"))+
+    ggtitle("Timeseries of fished biomass for the Barents Sea food web")
  
   gg<-list(Biomass=gg_bio,Flows=gg_flow,Phi=gg_phi)
  

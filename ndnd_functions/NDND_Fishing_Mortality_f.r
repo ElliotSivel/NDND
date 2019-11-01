@@ -13,11 +13,11 @@
 Phi.Mortality<-function(Out.file){
   
   # Extract the data needed to estimate the landings
-  Biomass<-as.matrix(Out.file$Output.BI$Biomass)                                # Biomass output
+  Biomass<-as.matrix(Out.file$Output$Biomass)                                # Biomass output
   sim_l<-as.numeric(length(table(Biomass[,ncol(Biomass)])))                     # Number of simulations
   Mu<-Out.file$Data$Mu                                                          # Metabolic losses
   Sp<-Out.file$Data$Species                                                     # List of species names
-  Phi<-Out.file$Output.BI$Phi                                                   # Fishing mortality rates output
+  Phi<-Out.file$Output$Phi                                                   # Fishing mortality rates output
   Tmax<-Out.file$Data$Tmax                                                      # Length of one simulation
   BI<-Out.file$Burn.In                                                          # Burn-in value 
   
@@ -68,7 +68,7 @@ Phi.Mortality<-function(Out.file){
   # FM_gg$Simulation<-factor(FM_gg$Simulation,levels=1:sim_l)
   
   # Plotting fishing mortality 
-  gg_FM<-ggplot(FM_gg,aes(x=as.factor(V4),y=F.Mortality,group=V3))+
+  gg_FM<-ggplot(FM_gg,aes(x=as.factor(V4),y=F.Mortality,group=V3),label=FALSE)+
     geom_line()+
     facet_wrap(.~factor(Species,levels = Out.file$Data$Species[5:6]),ncol=1,scale="free")+
     scale_x_discrete(breaks = seq(min(FM_gg$V4),max(FM_gg$V4),50))+
@@ -87,7 +87,7 @@ Phi.Mortality<-function(Out.file){
     theme(strip.background = element_rect(fill = "gray"))
   
   return(list(Sim.tag=Out.file$Sim.tag,
-              Outputs=Out.file$Output.BI,
+              Outputs=Out.file$Output,
               Fishing.Mortality=FM_no_ice,
               Fishing.Mortality.Ice=FM_ice,
               TimeSeries.FM=gg_FM))

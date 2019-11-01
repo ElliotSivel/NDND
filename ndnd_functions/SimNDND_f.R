@@ -53,9 +53,9 @@ SimNDND <- function(NDNDData){
     Abp<-possibleAb(A,b,NDNDData$PFv)
     pA<-Abp[[1]];pb<-Abp[[2]]               # Defines two matrices with the existing constraint on flows and biomasses
   
-    TRY=try(Fsample<-Sampling(pA,pb,"cpgs2"))
+    TRY=try(Fsample<-Sampling(pA,pb,NDNDData$Sampling_algorithm))
     if(inherits(TRY, "try-error")==FALSE){
-      Fsample<-Sampling(pA,pb,"cpgs2")
+      Fsample<-Sampling(pA,pb,NDNDData$Sampling_algorithm)
     } else {
       print("No polytope solution")
       break

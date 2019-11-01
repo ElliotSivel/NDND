@@ -27,7 +27,7 @@ Sampling<-function(pA,pb,samp_type){
 
     F0<-Fsample[[1]][sample(1:nrow(Fsample[[1]]),1),]          # Choose randomly one vector of flows in the output
   }
-  else if (samp_type=="cpgs"){
+  else if (samp_type=="cpgsR"){
 
     G<-as.matrix(pA)                       # Defining A for the sampling
     h<-as.matrix(pb)                       # Defining b for the sampling

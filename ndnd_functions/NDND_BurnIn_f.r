@@ -43,7 +43,7 @@ NDND.BI<-function(AutoCor,Out.file){
   out<-list(Sim.tag=Output$Sim.tag,
             Data=Output$Data,
             Burn.In=BI,
-            Output.BI=g)
+            Output=g)
   
   return(out)
 }
