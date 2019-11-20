@@ -18,8 +18,8 @@
 
 #####
 # Needs to be generalized
-Sys.setenv(PATH = "C:/Users/a22073/Documents/Rtools/bin;
-           C:/Users/a2207/Documents/R-3.6.0/bin/x64;
+Sys.setenv(PATH = "C:/Program Files/Rtools/bin;
+           C:/Program Files/R-3.6.1/bin/x64;
            C:/Program Files(x86)/Common Files/Oracle/Java/javapath;
            C:/WINDOWS/system32;
            C:/WINDOWS; 
@@ -99,17 +99,9 @@ if(test_ndnd_data==F){
 } else {load(file=paste(dir_tab$data_dir,"/NDNDData.RData",sep=""))}
 
 # 6. run the simulation ------------------------------------------------------
-
-# # Here it run a the simulation for one simulation
-# 
-# T1<-Sys.time()                                       # Timer on
-# NDNDSimulation=SimNDND(NDNDData)
-# T2<-Sys.time()                                       # Timer off
-# 
-# Tdif<-difftime(T2,T1)                                # Simulation time
-# Tdif
-
 # Make it run for several simulations
+
+T1<-Sys.time()                                       # Timer on
 
 sim_bio<-NULL                 # Create the object that will contain the biomass simulation outputs
 sim_flow<-NULL                # Create the object that will contain the flows simulation outputs
@@ -122,6 +114,10 @@ for (i in 1:s_length){
   sim_flow<-rbind(sim_flow,sim$Output$FlowSeries)                      # Binds the matrices of flows time series in a third dimension
   sim_phi<-rbind(sim_phi,sim$Output$PhiSeries)                         # Binds the matrices of the fishing losses in a third dimension
 }
+
+T2<-Sys.time()                                       # Timer off
+
+Tdif<-difftime(T2,T1)                                # Simulation time
 
 sim_out<-NDND.nb.sim(Data = NDNDData,
                      s_length = s_length,

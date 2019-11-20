@@ -12,4 +12,4 @@ export.txt
 100
 
 1
-cpgs2
+cpgsR

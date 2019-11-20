@@ -19,14 +19,14 @@ plot.NDND<-function(Out.file){
   Tmax<-Out.file$Data$Tmax
   BI<-Out.file$Burn.In
   
-  Years<-rep(1:(Tmax-BI),times=as.numeric(length(table(Biomass[,ncol(Biomass)]))))
+  Years<-rep(1:(Tmax),times=as.numeric(length(table(Biomass[,ncol(Biomass)]))))
   Biomass<-cbind(Years,Biomass)
   bio_gg<-gather(Biomass,key="Species",value="Biomass",2:(ncol(Biomass)-1))
  
   gg_bio<-ggplot(bio_gg,aes(x=as.factor(Years),y=Biomass,group=Simulation))+
     geom_line(aes(color=Species))+
     facet_wrap(.~factor(Species,levels = Sp),ncol=3,scale="free_y")+
-    scale_x_discrete(name="Years",breaks = seq(min(bio_gg$Years)-1,max(bio_gg$Years)-1,100))+
+    scale_x_discrete(name="Years",breaks = seq(min(bio_gg$Years)-1,max(bio_gg$Years)-1,50))+
     scale_color_brewer(palette = "Paired")+
     theme_bw()+
     theme(strip.background = element_rect(fill = "gray"),
@@ -36,7 +36,7 @@ plot.NDND<-function(Out.file){
 
     # ggtitle("Timeseries of biomass for the Barents Sea food web")
  
-  Years<-rep(1:((Tmax-1)-BI),times=as.numeric(length(table(Biomass[,ncol(Biomass)]))))
+  Years<-rep(1:(Tmax-1),times=as.numeric(length(table(Biomass[,ncol(Biomass)]))))
   Flows<-cbind(Years,Flows)
   f_gg<-gather(Flows,key="Flows",value="Biomass",2:(ncol(Flows)-1))
  
@@ -49,7 +49,7 @@ plot.NDND<-function(Out.file){
     theme(strip.background = element_rect(fill = "gray"))+
     ggtitle("Timeseries of flows for the Barents Sea food web")
  
-  Years<-rep(1:((Tmax-1)-BI),times=as.numeric(length(table(Biomass[,ncol(Biomass)]))))
+  Years<-rep(1:(Tmax-1),times=as.numeric(length(table(Biomass[,ncol(Biomass)]))))
   Phi<-cbind(Years,Phi)
   Phi<-Phi[,c("Years","Pelagics","Demersals","Simulation")]
   Phi_gg<-gather(Phi,key="F.Mortality",value="Biomass",2:(ncol(Phi)-1))

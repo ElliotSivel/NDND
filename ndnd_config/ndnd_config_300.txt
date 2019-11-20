@@ -9,6 +9,7 @@ import.txt
 
 export.txt
 
-200
+300
+
 1
 cpgsR

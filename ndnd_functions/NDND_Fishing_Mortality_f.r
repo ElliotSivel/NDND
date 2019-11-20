@@ -19,7 +19,7 @@ Phi.Mortality<-function(Out.file){
   Sp<-Out.file$Data$Species                                                     # List of species names
   Phi<-Out.file$Output$Phi                                                   # Fishing mortality rates output
   Tmax<-Out.file$Data$Tmax                                                      # Length of one simulation
-  BI<-Out.file$Burn.In                                                          # Burn-in value 
+  BI<-159                                                         # Burn-in value 
   
   # Create subsets of the initial biomass outputs
   sub<-NULL                                                                     # Creates an empty object : sub
