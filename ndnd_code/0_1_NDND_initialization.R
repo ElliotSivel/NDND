@@ -27,7 +27,7 @@ require(rstudioapi)                         # Loading the rstudioapi package -- 
 # Once installed you need to add the path to Rtools to the environment path with the function sys.setenv()
 
 # Needs to be generalized
-Sys.setenv(PATH = "C:/Rtools/bin;
+Sys.setenv(PATH = "C:/Rtools40/bin;
            C:/Program Files/R-3.6.1/bin/x64;
            C:/Program Files(x86)/Common Files/Oracle/Java/javapath;
            C:/WINDOWS/system32;
