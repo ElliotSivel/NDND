@@ -29,5 +29,3 @@ test_ndnd_data<-yesno2("Do you have a NDNDDate file containing the setup for the
 if(test_ndnd_data==F){                                                        # Do you have a NDNDData file
   source('./ndnd_code/0_3_NDND_dataprep.r')                                   # If not, run the Dataprep.r file
 } else {load(file=paste(dir_tab$data_dir,"/NDNDData.RData",sep=""))}          # If yes, just load the existing NDNDData file
-
-# ## ==> NDND_simulation.r
