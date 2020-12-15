@@ -33,7 +33,6 @@ SimNDND <- function(NDNDData){
   BiomassSeries<-matrix(data = 0, nrow = NDNDData$Tmax, ncol = NDNDData$ns)               # Creates a matrix of dimension Tmax vs number of species full of 0. It is thought be filled with the biomass obtained during the calculations
   BiomassSeries[1,]<-NDNDData$Biomass                                                     # We give that the biomass for t = 1 is the initial biomass
   FlowSeries<-matrix(data = 0, nrow = (NDNDData$Tmax-1), ncol = sum(NDNDData$PFv))        # Creates a matrix of dimension Tmax vs the number of possible flows. We kept only the links for which we had a 1 in PF. There are 18 links in our topology.
-  tcrash_m<-matrix(0,nrow=1,ncol=s_length)
  
   # 2. Main loop -----------------------------------------------------------------
   
@@ -73,9 +72,6 @@ SimNDND <- function(NDNDData){
     }
   }
   
-  # Save the number of crashs
-  tcrash_m[i]<-tcrash
-  
   # reattributes species names for columns and year numbers for rows
   colnames(BiomassSeries)<-NDNDData$Species
   rownames(BiomassSeries)<-1:NDNDData$Tmax
@@ -110,7 +106,7 @@ SimNDND <- function(NDNDData){
     # Create a list containing the input data, output and the code used to run the simulation  
     NDNDSimulation=list(Simulation.tag=Simulation.tag,
                         Data=NDNDData,
-                        Tcrash=tcrash_m,
+                        Tcrash=tcrash,
                         Output=NDNDOutput,
                         Code=NDNDCode)
     
