@@ -39,7 +39,7 @@ Computeb<-function(NDNDData,Biomass,t){
   b2<-as.matrix(((1/C)*(exp(Rho)-D)*Biomass)+Export)                  # Computes b2; We added -Import on the 16.11.2020 - removed it on the 17.11.2020
 
   # Third constraint : Flows are bounded above - satiation (Sigma)
-  b3<-as.matrix(Biomass*Sgma)                                        # Computes b3
+  b3<-as.matrix(Biomass[-9]*Sgma)                                        # Computes b3
 
   # Fourth constraint, flows are positive
   b4<-matrix(0,nn,1)                                                  # Computes b4
