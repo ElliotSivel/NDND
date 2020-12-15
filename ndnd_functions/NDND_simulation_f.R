@@ -85,7 +85,7 @@ SimNDND <- function(NDNDData){
   
   # 3. return simulation outputs  -------------------------------------------
   
-  NDNDOutput=list(BiomassSeries=BiomassSeries,FlowSeries=FlowSeries)         # Creates a list with all outputs
+  NDNDOutput=list(BiomassSeries=BiomassSeries,FlowSeries=FlowSeries,Fish=NDNDData$Exportall)         # Creates a list with all outputs
   
   # Load the code to insert it into the NDNDSimulation file
   NDNDCode=NULL
