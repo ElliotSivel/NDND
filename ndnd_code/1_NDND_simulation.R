@@ -13,6 +13,7 @@
 # Needed libraries
 ###
 require(yesno)
+require(abind)
 ###
 
 # Source the initialization file
@@ -35,6 +36,8 @@ if (test_ndnd_Output==F){ # If simulation outputs not available, we run the simu
   sim_flow<-NULL # Create the object that will contain the flows simulation outputs
   ExpF<-NULL
   Tcrash<-NULL # Create an empty vector where the number of crashes per run is saved
+  AllA<-NULL
+  ALLsimb<-NULL
   
   # Run the simulation
   for (i in 1:s_length){
@@ -51,6 +54,8 @@ if (test_ndnd_Output==F){ # If simulation outputs not available, we run the simu
     sim_flow<-rbind(sim_flow,sim$Output$FlowSeries)                      # Binds the matrices of flows time series in a third dimension
     ExpF<-rbind(ExpF,sim$Output$Fish)
     Tcrash[i]<-sim$Tcrash                                                # Fills the Tcrash vector
+    AllA<-abind(AllA,sim$A,along = 3)
+    ALLsimb<-abind(ALLsimb,sim$b, along=3)
   }
   
   T2<-Sys.time()                                       # Timer off
@@ -67,7 +72,9 @@ if (test_ndnd_Output==F){ # If simulation outputs not available, we run the simu
                Biomass = sim_bio,                          # Saves the Biomass time series
                Flows = sim_flow,                           # Saves the Flows time series
                Fish = ExpF,                              # Saves the fishing mortality time series
-               Code = sim$Code)                            # Saves the code used to run the simulation -- Code + functions
+               Code = sim$Code,
+               A=AllA,
+               b=ALLsimb)                            # Saves the code used to run the simulation -- Code + functions
   # )
   
   # 4. save simulation outputs  -------------------------------------------
@@ -76,3 +83,4 @@ if (test_ndnd_Output==F){ # If simulation outputs not available, we run the simu
   save(Output,file=paste(NDNDData$directories$outputs_dir,"/NDNDsim_out.RData",sep = ""))
   
 } else {load(file=paste(NDNDData$directories$outputs_dir,"/NDNDsim_out.RData",sep = ""))} # If there is a simulation output available, we load it
+

@@ -33,7 +33,7 @@ SimNDND <- function(NDNDData){
   BiomassSeries<-matrix(data = 0, nrow = NDNDData$Tmax, ncol = NDNDData$ns)               # Creates a matrix of dimension Tmax vs number of species full of 0. It is thought be filled with the biomass obtained during the calculations
   BiomassSeries[1,]<-NDNDData$Biomass                                                     # We give that the biomass for t = 1 is the initial biomass
   FlowSeries<-matrix(data = 0, nrow = (NDNDData$Tmax-1), ncol = sum(NDNDData$PFv))        # Creates a matrix of dimension Tmax vs the number of possible flows. We kept only the links for which we had a 1 in PF. There are 18 links in our topology.
- 
+  Allb<-array(NA,dim=c(49,500))
   # 2. Main loop -----------------------------------------------------------------
   
   # The model run over Tmax years
@@ -51,23 +51,35 @@ SimNDND <- function(NDNDData){
     # Delete irrelevant constraints using possibleAb
     Abp<-possibleAb(A,b,NDNDData$PFv)
     pA<-Abp[[1]];pb<-Abp[[2]]               # Defines two matrices with the existing constraint on flows and biomasses
+    Allb[,t]<-pb
     
     TRY=try(Fsample<-Sampling(pA,pb))
-    TRYAB<-try(pA%*%Fsample<=pb)
+    fluxok<-FALSE
     
-    if(inherits(TRY, "try-error")==FALSE && length(TRYAB[TRYAB==FALSE])==0){
-       # Reattributing the flows values
-       Fluxes<-rep(0,NDNDData$nn)             # Creating a vector of 0 and of length nn
-       Fluxes[NDNDData$PFv==1]<-Fsample       # Attribute the flow values at the right place according to the vector PFv
-       
-       BiomassSeries[t+1,]=ComputeBiomass(NDNDData,BiomassSeries[t,],Fluxes,t) # Compute biomass at the next time step
-       FlowSeries[t,]<-Fsample # store trophic fluxes
-       t=t+1 # Incrementation
+    if(inherits(TRY, "try-error")==FALSE & is.na(sum(TRY))!=TRUE ){
+      TRYAB<-sum(as.numeric(pA%*%Fsample>pb))
+      print(TRYAB)
+      if (TRYAB==0){
+        fluxok<-TRUE
+      } 
+    }
+    
+    print(fluxok)
+    if(fluxok==TRUE){
+      # Reattributing the flows values
+      Fluxes<-rep(0,NDNDData$nn)             # Creating a vector of 0 and of length nn
+      Fluxes[NDNDData$PFv==1]<-Fsample       # Attribute the flow values at the right place according to the vector PFv
+      BiomassSeries[t+1,]=ComputeBiomass(NDNDData,BiomassSeries[t,],Fluxes,t) # Compute biomass at the next time step
+      FlowSeries[t,]<-Fsample # store trophic fluxes
+      t=t+1 # Incrementation
     } else {
       if (t>=10) { # if there is no solution, one of the condition is not fullfilled, then it means that there is no polytope or that sampling is outside the polytope, then we stop the sampling and go back 5 time steps.  
         print("crashed - go back 5 time steps")
         t=t-5
         tcrash=tcrash+1 # When this happens, we add 1 to the number of crashs
+      } else {
+        t=t-1
+        tcrash=tcrash+1
       }
     }
   }
@@ -77,7 +89,7 @@ SimNDND <- function(NDNDData){
   rownames(BiomassSeries)<-1:NDNDData$Tmax
   colnames(FlowSeries)<-NDNDData$flows
   rownames(FlowSeries)<-1:(NDNDData$Tmax-1)
-
+  
   # Transform the time series in data frames 
   BiomassSeries<-cbind(as.data.frame(BiomassSeries),"Simulation"=rep(i,times=nrow(BiomassSeries)))
   FlowSeries<-cbind(as.data.frame(FlowSeries),"Simulation"=rep(i,times=nrow(FlowSeries)))
@@ -103,14 +115,16 @@ SimNDND <- function(NDNDData){
       NDNDCode$functions[[i]]=scan(function2scan,what="",sep="\n")
     }
   }
-    # Create a list containing the input data, output and the code used to run the simulation  
-    NDNDSimulation=list(Simulation.tag=Simulation.tag,
-                        Data=NDNDData,
-                        Tcrash=tcrash,
-                        Output=NDNDOutput,
-                        Code=NDNDCode)
-    
-    # Object to return from the function
-    return(NDNDSimulation)
+  # Create a list containing the input data, output and the code used to run the simulation  
+  NDNDSimulation=list(Simulation.tag=Simulation.tag,
+                      Data=NDNDData,
+                      Tcrash=tcrash,
+                      Output=NDNDOutput,
+                      Code=NDNDCode,
+                      A=pA,
+                      b=Allb)
+  
+  # Object to return from the function
+  return(NDNDSimulation)
   
 }

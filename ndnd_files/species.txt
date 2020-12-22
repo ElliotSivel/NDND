@@ -1,1 +1,1 @@
-Phytoplankton	herbivorouspk	omnivorouspk	Benthos	Pelagics	Demersals	Mammals	Birds
+Phytoplankton	Herbivorouspk	Omnivorouspk	Benthos	Pelagics	Demersals	Mammals	Birds

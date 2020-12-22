@@ -36,7 +36,7 @@ Computeb<-function(NDNDData,Biomass,t){
   b1<-as.matrix((1/C)*(D*Biomass-Bta)+Import-Export)                  # Computes b1
   
   # Second constraint : Biomass increases are bounded above - inertia (Rho)
-  b2<-as.matrix(((1/C)*(exp(Rho)-D)*Biomass)+Export)                  # Computes b2; We added -Import on the 16.11.2020 - removed it on the 17.11.2020
+  b2<-as.matrix(((1/C)*(exp(Rho)-D)*Biomass)+Export+Import*(Biomass-1))                  # Computes b2; We added -Import on the 16.11.2020 - removed it on the 17.11.2020
 
   # Third constraint : Flows are bounded above - satiation (Sigma)
   b3<-as.matrix(Biomass[-9]*Sgma)                                        # Computes b3
