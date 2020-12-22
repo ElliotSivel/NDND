@@ -11,4 +11,4 @@ export.txt
 
 500
 1
-cpgsR
+RCaN_cpgs
