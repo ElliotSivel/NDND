@@ -78,7 +78,7 @@ SimNDND <- function(NDNDData){
         t=t-5
         tcrash=tcrash+1 # When this happens, we add 1 to the number of crashs
       } else {
-        t=t-1
+        t=max(1,t-1)
         tcrash=tcrash+1
       }
     }

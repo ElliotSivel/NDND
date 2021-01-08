@@ -116,10 +116,11 @@ Sim.Diagnose<-function(Out.file){
   Fg<-NULL
   for (s in 1:length(Sp)) {
     sub_l<-Flows[,grep(pattern=paste("*--> ",Sp[s],sep=""),x=colnames(Flows))]
-    na_co<-sub("-->.*","",colnames(sub_l))
+    na_co<-colnames(Flows)[grep(pattern=paste("*--> ",Sp[s],sep=""),x=colnames(Flows))]
+    na_co<-sub("-->.*","",na_co)
     kapa_sub<-Kapa_m[,colnames(Kapa_m) %in% trimws(c(na_co))]
     sub_l_k<-sub_l*(1-kapa_sub)
-    sum_sp<-as.numeric(apply(sub_l_k, 1, sum))
+    sum_sp<-as.numeric(apply(as.matrix(sub_l_k), 1, sum))
     Fg<-cbind(Fg,sum_sp)
   }
   
