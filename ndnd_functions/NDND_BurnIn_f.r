@@ -12,15 +12,15 @@ NDND.BI<-function(AutoCor,Out.file){
   
   # extract BI value from the AutoCor file
   BI<-AutoCor$Burn_In
-  Biomass<-Out.file$Output_NaN_0$Biomass
-  Flows<-Out.file$Output_NaN_0$Flows
-  Phi<-Out.file$Output_NaN_0$Phi
+  Biomass<-Out.file$Biomass
+  Flows<-Out.file$Flows
+  Fish<-Out.file$Fish[,1:9]
   Tmax<-Out.file$Data$Tmax
   sim_l<-as.numeric(length(table(Biomass[,ncol(Biomass)])))
   
   Biomass_BI<-NULL
   Flows_BI<-NULL
-  Phi_BI<-NULL
+  Fish_BI<-NULL
   
   for (i in 1:sim_l){
     a<-Biomass[as.matrix(Biomass$Simulation)==as.matrix(1:sim_l)[i],]
@@ -31,13 +31,13 @@ NDND.BI<-function(AutoCor,Out.file){
     d<-as.matrix(c[(BI+1):(Tmax-1),])
     Flows_BI<-rbind(Flows_BI,d)
     
-    e<-Phi[as.matrix(Phi$Simulation)==as.matrix(1:sim_l)[i],]
+    e<-Fish[as.matrix(Fish[,9])==as.matrix(1:sim_l)[i],]
     f<-as.matrix(e[(BI+1):(Tmax-1),])
-    Phi_BI<-rbind(Phi_BI,f)
+    Fish_BI<-rbind(Fish_BI,f)
   }
   
   # Gather the time series of biomass, flows and fisheries into one list
-  g<-list(Biomass=Biomass_BI,Flows=Flows_BI,Phi=Phi_BI) 
+  g<-list(Biomass=Biomass_BI,Flows=Flows_BI,Fish=Fish_BI) 
   
   # gather the two list in one
   out<-list(Sim.tag=Output$Sim.tag,
