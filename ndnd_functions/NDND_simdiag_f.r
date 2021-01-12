@@ -13,26 +13,25 @@ require(purrr)
 
 # We estimate the fishing mortality based on estimated values of fishing mortality rates and the Baranov equations
 
-Sim.Diagnose<-function(Out.file){
+Sim.Diagnose<-function(Output,sim){
   
 # 1. Loading the data and parameters --------------------------------------
 
   # Extract the data needed
-  Biomass<-as.matrix(Out.file$Biomass)                                   # Biomass output
-  Flows<-Out.file$Flows                                                  # Flows output
+  Biomass<-Output$Biomass[Output$Biomass$Simulation %in% sim,]                                   # Biomass output
+  Flows<-Output$Flows[Output$Flows$Simulation %in% sim,]                                                # Flows output
   sim_l<-as.numeric(length(table(Biomass[,ncol(Biomass)])))              # Number of simulations
-  Simulation<-Biomass[,ncol(Biomass)]                                    # Vector of simulation ID
-  Tmax<-Out.file$Data$Tmax                                               # Length of one simulation
+  Tmax<-Output$Data$Tmax                                               # Length of one simulation
   Years<-rep(1:(Tmax-1),times=as.numeric(length(table(Biomass[,ncol(Biomass)])))) # Creating the vector of years
-  Mu<-Out.file$Data$Mu                                                   # Metabolic losses
-  Sp<-Out.file$Data$Species                                              # List of species names
-  Kapa<-Out.file$Data$Kapa                                               # Prey digestability
-  Gama<-Out.file$Data$Gama                                               # Predator assimilation capacity
-  Imp<-Out.file$Data$Import                                              # Import data
-  Export<-as.matrix(Out.file$Fish)                                           # Export data
+  Mu<-Output$Data$Mu                                                   # Metabolic losses
+  Sp<-Output$Data$Species                                              # List of species names
+  Kapa<-Output$Data$Kapa                                               # Prey digestability
+  Gama<-Output$Data$Gama                                               # Predator assimilation capacity
+  Imp<-Output$Data$Import                                              # Import data
+  Export<-Output$Fish[Output$Fish$Simulation %in% sim,]                                           # Export data
   
   # Create subsets of the initial biomass outputs
-  s_b<-Biomass %>% split(as.factor(Biomass[,ncol(Biomass)]))
+  s_b<-Biomass %>% as.matrix %>% split(as.factor(Biomass[,ncol(Biomass)]))
   sub_bio<-map(s_b,function(x){
     sub<-matrix(x,ncol = ncol(Biomass))
     sub<-sub[1:(Tmax-1),]
@@ -60,7 +59,7 @@ Sim.Diagnose<-function(Out.file){
   
   Imp_m<-Imp %>% rep(times=nrow(sub_bio)) %>% matrix(nrow = nrow(sub_bio),ncol = length(Sp),byrow = T)
   
-  s_e<-Export %>% split(as.factor(Export[,ncol(Export)]))
+  s_e<-Export %>% as.matrix %>% split(as.factor(Export[,ncol(Export)]))
   sub_exp<-map(s_e,function(x){
     sub<-matrix(x,ncol = ncol(Export))
     sub<-sub[1:(Tmax-1),]
@@ -135,7 +134,7 @@ Sim.Diagnose<-function(Out.file){
 
   dif_B<-NULL
   for (j in 1:sim_l){
-    sub_j<-Biomass[Biomass[,ncol(Biomass)]==as.matrix(1:sim_l)[j],]
+    sub_j<-as.matrix(Biomass[Biomass[,ncol(Biomass)] %in% unique(Biomass[,9])[j],])
     for (k in (1:nrow(sub_j))-1){
       dlta<-sub_j[k+1,]-sub_j[k,]
       dif_B<-rbind(dif_B,dlta)
@@ -148,7 +147,7 @@ Sim.Diagnose<-function(Out.file){
 
 # 11. Return output of function -------------------------------------------
   
-  return(list(Sim.tag=Out.file$Sim.tag,
+  return(list(Sim.tag=Output$Sim.tag,
               bio=sub_bio,
               fish=sub_exp,
               Other_losses=E,
